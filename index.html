@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#24408E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Aula">
+<title>Aula</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fuente:'Atkinson Hyperlegible',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --papel:#F2F5F3; --superficie:#FFFFFF; --tinta:#17252D; --tinta-2:#55666F; --linea:#D5DEDA;
+  --azul:#24408E; --azul-suave:#E2E8F7; --sobre-azul:#FFFFFF;
+  --ok:#17794F; --ok-bg:#DCF1E5;
+  --tarde:#8F5C00; --tarde-bg:#FFEFC7;
+  --enf:#6236B8; --enf-bg:#EBE3FA;
+  --falta:#B3303A; --falta-bg:#FBE0E2;
+  --pend:#55666F; --pend-bg:#E7ECEA;
+  --radio:14px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --papel:#0F171B; --superficie:#172329; --tinta:#E8EFEC; --tinta-2:#9DB0B8; --linea:#2A3A42;
+    --azul:#8FA8F0; --azul-suave:#1F2B4D; --sobre-azul:#0F171B;
+    --ok:#5FD39C; --ok-bg:#12352A;
+    --tarde:#F2BE55; --tarde-bg:#3A2E10;
+    --enf:#BFA2F5; --enf-bg:#2D2247;
+    --falta:#F58C94; --falta-bg:#3F1D21;
+    --pend:#9DB0B8; --pend-bg:#22323A;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--papel);color:var(--tinta);font:400 1rem/1.45 var(--fuente);min-height:100dvh}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--azul);outline-offset:2px}
+[hidden]{display:none!important}
+h1,h2,h3,p{margin:0}
+
+/* Estructura */
+main{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+.wrap{max-width:1040px;margin:0 auto;padding:16px}
+.top{position:sticky;top:0;z-index:5;background:var(--papel);border-bottom:1px solid var(--linea);
+  padding:calc(10px + env(safe-area-inset-top)) 16px 10px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.top h1{font-size:1.3rem;letter-spacing:-.01em}
+.sync{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--linea);background:var(--superficie);
+  border-radius:999px;padding:6px 12px;font-size:.85rem;color:var(--tinta-2)}
+.sync i{width:10px;height:10px;border-radius:50%;background:var(--ok)}
+.sync.off i{background:var(--falta)}
+.sync.cola i{background:var(--tarde)}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--superficie);border-top:1px solid var(--linea);
+  display:flex;padding-bottom:env(safe-area-inset-bottom)}
+.nav button{flex:1;padding:10px 4px 8px;background:none;border:0;display:grid;justify-items:center;gap:2px;font-size:.82rem;color:var(--tinta-2)}
+.nav button svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav button[aria-current=page]{color:var(--azul);font-weight:700}
+@media(min-width:900px){
+  .nav{top:0;right:auto;width:96px;flex-direction:column;justify-content:flex-start;gap:6px;border-top:0;border-right:1px solid var(--linea);padding-top:14px}
+  .nav button{padding:12px 4px}
+  main{margin-left:96px;padding-bottom:32px}
+  .top{padding-left:24px;padding-right:24px}
+}
+
+/* Componentes */
+.card{background:var(--superficie);border:1px solid var(--linea);border-radius:var(--radio);padding:16px}
+.stack{display:grid;gap:16px}
+.campos{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:640px){.campos.tres{grid-template-columns:2fr 1.2fr 1fr auto;align-items:end}}
+label.campo{display:grid;gap:4px;font-size:.9rem;color:var(--tinta-2)}
+input[type=text],input[type=url],input[type=date],input[type=time],input[type=search],input[type=password],select,textarea{
+  width:100%;padding:11px 12px;border:1px solid var(--linea);border-radius:10px;background:var(--papel);color:var(--tinta);min-height:46px}
+textarea{min-height:120px;resize:vertical}
+.btn{min-height:46px;padding:10px 18px;border-radius:12px;border:1px solid var(--linea);background:var(--superficie);font-weight:700}
+.btn.primario{background:var(--azul);border-color:var(--azul);color:var(--sobre-azul)}
+.btn.peligro{background:var(--falta);border-color:var(--falta);color:var(--sobre-azul)}
+.btn.suave{background:var(--azul-suave);border-color:transparent;color:var(--azul)}
+.btn.grande{min-height:58px;font-size:1.1rem;width:100%;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.nota{color:var(--tinta-2);font-size:.9rem}
+.vacio{padding:36px 16px;text-align:center;color:var(--tinta-2)}
+.vacio strong{display:block;color:var(--tinta);font-size:1.1rem;margin-bottom:4px}
+
+/* Sesión */
+.info-sesion{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:16px 0 4px}
+.info-sesion strong{font-size:1.15rem}
+.etiqueta-lista{padding:3px 10px;border-radius:999px;font-size:.85rem;font-weight:700;background:var(--ok-bg);color:var(--ok)}
+.etiqueta-lista.cerrada{background:var(--pend-bg);color:var(--pend)}
+.escaner{display:grid;gap:16px;margin-top:12px}
+@media(min-width:900px){.escaner{grid-template-columns:minmax(340px,460px) 1fr;align-items:start}}
+.info-sesion .btn{margin-left:auto;min-height:40px;padding:6px 14px}
+.chips.fijos{overflow:visible}
+.chips.fijos .chip{flex:1}
+.recientes{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.recientes li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;background:var(--superficie);border:1px solid var(--linea);border-radius:12px}
+.recientes li.nota{background:none;border-style:dashed}
+.recientes .nombre{font-weight:700}
+.sin-conexion .nav,.sin-conexion .sync{display:none}
+@media(min-width:900px){.sin-conexion main{margin-left:0}}
+@media(min-width:700px){.alumnos{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}}
+.lectura{display:grid;gap:2px;padding:16px 18px;border-radius:16px;border:2px solid var(--linea);background:var(--papel);margin-bottom:12px;min-height:104px;align-content:center}
+.lectura strong{font-size:1.55rem;line-height:1.15;letter-spacing:-.01em}
+.lectura span{font-size:.98rem}
+.lectura.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.lectura.tarde{background:var(--tarde-bg);border-color:var(--tarde);color:var(--tarde)}
+.lectura.aviso{background:var(--pend-bg);border-color:var(--pend);color:var(--tinta)}
+.lectura.error{background:var(--falta-bg);border-color:var(--falta);color:var(--falta)}
+.lectura.pop{animation:pop .22s ease-out}
+@keyframes pop{from{transform:scale(.97)}to{transform:scale(1)}}
+#visor{margin-top:12px}
+#lector{width:100%;border-radius:12px;overflow:hidden;background:#000;min-height:260px}
+#lector video{width:100%!important;object-fit:cover}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;margin:0 -2px}
+.chip{flex:0 0 auto;display:grid;gap:0;padding:8px 14px;border-radius:12px;border:1px solid var(--linea);background:var(--superficie);text-align:left;min-width:92px}
+.chip b{font-size:1.35rem;line-height:1.1}
+.chip span{font-size:.82rem;color:var(--tinta-2)}
+.chip[aria-pressed=true]{border-color:var(--azul);box-shadow:inset 0 0 0 1px var(--azul);background:var(--azul-suave)}
+.alumnos{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.alumnos li button.fila{width:100%;display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;text-align:left;
+  padding:12px 14px;background:var(--superficie);border:1px solid var(--linea);border-radius:12px;border-left-width:6px}
+.fila .nombre{font-weight:700}
+.fila .sub{grid-column:1;font-size:.86rem;color:var(--tinta-2)}
+.fila .estado{grid-row:1 / span 2;grid-column:2;display:flex;align-items:center;gap:8px}
+.fila.ok{border-left-color:var(--ok)} .fila.tarde{border-left-color:var(--tarde)} .fila.enf{border-left-color:var(--enf)}
+.fila.falta{border-left-color:var(--falta)} .fila.pend{border-left-color:var(--linea)}
+.pill{padding:4px 10px;border-radius:999px;font-size:.85rem;font-weight:700;white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)} .pill.tarde{background:var(--tarde-bg);color:var(--tarde)}
+.pill.enf{background:var(--enf-bg);color:var(--enf)} .pill.falta{background:var(--falta-bg);color:var(--falta)}
+.pill.pend{background:var(--pend-bg);color:var(--pend)}
+.nube{width:16px;height:16px;fill:none;stroke:var(--tarde);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pie{display:grid;gap:8px;margin-top:16px}
+
+/* Hoja (diálogo) */
+dialog{border:0;padding:0;background:var(--superficie);color:var(--tinta);width:min(560px,100%);max-width:100%;max-height:92dvh;border-radius:20px 20px 0 0;
+  margin:auto auto 0;box-shadow:0 -8px 40px rgba(0,0,0,.25)}
+dialog::backdrop{background:rgba(10,20,25,.55)}
+@media(min-width:700px){dialog{margin:auto;border-radius:20px}}
+.hoja{padding:20px 18px calc(18px + env(safe-area-inset-bottom));display:grid;gap:14px;overflow:auto;max-height:92dvh}
+.hoja h2{font-size:1.25rem;letter-spacing:-.01em}
+.opciones{display:grid;gap:8px;grid-template-columns:1fr 1fr}
+.opcion{position:relative}
+.opcion input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.opcion span{display:grid;place-items:center;text-align:center;min-height:56px;padding:8px;border:2px solid var(--linea);border-radius:12px;font-weight:700;background:var(--papel)}
+.opcion input:focus-visible + span{outline:3px solid var(--azul);outline-offset:2px}
+.opcion input:checked + span.ok{border-color:var(--ok);background:var(--ok-bg);color:var(--ok)}
+.opcion input:checked + span.tarde{border-color:var(--tarde);background:var(--tarde-bg);color:var(--tarde)}
+.opcion input:checked + span.enf{border-color:var(--enf);background:var(--enf-bg);color:var(--enf)}
+.opcion input:checked + span.falta{border-color:var(--falta);background:var(--falta-bg);color:var(--falta)}
+.opcion input:checked + span.neutro{border-color:var(--azul);background:var(--azul-suave);color:var(--azul)}
+.opciones.tres-col{grid-template-columns:repeat(3,1fr)}
+.opciones.tres-col .opcion span{min-height:48px;font-size:.95rem}
+.acciones{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.acciones .btn{flex:1 1 140px}
+.qr-grande{display:grid;place-items:center;gap:8px;padding:8px 0}
+.qr-grande svg{width:min(260px,70vw);height:auto;background:#fff;padding:12px;border-radius:12px}
+.pestanas{display:flex;gap:6px}
+.pestanas button{flex:1;padding:9px;border-radius:10px;border:1px solid var(--linea);background:var(--papel);font-weight:700}
+.pestanas button[aria-selected=true]{background:var(--azul-suave);border-color:var(--azul);color:var(--azul)}
+
+/* Alumnos */
+.barra{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:12px}
+.barra .campo{flex:1 1 200px}
+.barra .btn{flex:0 0 auto}
+.fila-alumno{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;padding:12px 14px;background:var(--superficie);border:1px solid var(--linea);border-radius:12px}
+.fila-alumno .id{font-size:.82rem;color:var(--tinta-2);font-variant-numeric:tabular-nums}
+.fila-alumno .btn{grid-row:1 / span 2;grid-column:2;min-height:40px;padding:6px 14px}
+
+/* Aviso y toast */
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom));z-index:20;max-width:min(92vw,520px);
+  background:var(--tinta);color:var(--papel);padding:12px 16px;border-radius:12px;font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.3)}
+#toast.error{background:var(--falta);color:var(--sobre-azul)}
+@media(min-width:900px){#toast{bottom:32px}}
+
+/* Impresión de gafetes */
+#impresion{display:none}
+@media print{
+  body>*:not(#impresion){display:none!important}
+  #impresion{display:grid;grid-template-columns:repeat(2,86mm);gap:0;justify-content:center;color:#000;background:#fff}
+  .gafete{width:86mm;height:54mm;border:.3mm dashed #888;padding:5mm;display:grid;grid-template-columns:1fr 34mm;gap:4mm;align-items:center;break-inside:avoid;font-family:var(--fuente)}
+  .gafete .g-nombre{font-size:13pt;font-weight:700;line-height:1.15}
+  .gafete .g-dato{font-size:8.5pt;margin-top:2mm}
+  .gafete svg{width:34mm;height:34mm}
+  @page{margin:10mm}
+}
+@media(prefers-reduced-motion:reduce){.lectura.pop{animation:none}}
+</style>
+</head>
+<body>
+
+<main>
+  <header class="top">
+    <h1 id="titulo">Asistencia</h1>
+    <button class="sync" id="sync" type="button" aria-live="polite"><i></i><span>En línea</span></button>
+  </header>
+
+  <!-- ===================== ASISTENCIA ===================== -->
+  <section id="v-asistencia" class="wrap">
+    <div class="card">
+      <div class="campos tres">
+        <label class="campo">Grupo<select id="a-grupo"></select></label>
+        <label class="campo">Fecha<input type="date" id="a-fecha"></label>
+        <label class="campo">Hora de inicio<input type="time" id="a-hora"></label>
+        <button class="btn primario" id="a-abrir" type="button">Abrir lista</button>
+      </div>
+    </div>
+
+    <div id="a-vacio" class="vacio">
+      <strong>Elige un grupo y abre la lista</strong>
+      Después podrás marcar la asistencia a mano o escanear los gafetes desde la pestaña Escanear.
+    </div>
+
+    <div id="a-sesion" hidden>
+      <div class="info-sesion">
+        <strong id="a-info"></strong>
+        <span class="etiqueta-lista" id="a-estado"></span>
+        <button class="btn suave" id="a-ir-escanear" type="button">Escanear gafetes</button>
+      </div>
+      <div class="chips" id="a-chips" role="group" aria-label="Filtrar lista"></div>
+      <ul class="alumnos" id="a-lista"></ul>
+      <div class="pie" id="a-pie"></div>
+    </div>
+  </section>
+
+  <!-- ===================== ESCANEAR ===================== -->
+  <section id="v-escanear" class="wrap" hidden>
+    <div id="e-sin" class="card stack" style="max-width:560px">
+      <h2>¿A qué grupo le pasas lista?</h2>
+      <label class="campo">Grupo<select id="e-grupo"></select></label>
+      <button class="btn primario grande" id="e-iniciar" type="button">Abrir la lista de hoy y escanear</button>
+      <p class="nota">Si la lista de hoy ya existe para este grupo, se retoma donde la dejaste.</p>
+    </div>
+
+    <div id="e-con" hidden>
+      <div class="info-sesion">
+        <strong id="e-info"></strong>
+        <span class="etiqueta-lista" id="e-estado"></span>
+      </div>
+      <div class="escaner">
+        <div class="card">
+          <div id="lectura" class="lectura aviso" role="status" aria-live="polite">
+            <strong>Listo para escanear</strong>
+            <span>Acerca el gafete a la cámara.</span>
+          </div>
+          <button id="e-camara" class="btn grande primario" type="button">
+            <svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M4 12h16"/></svg>
+            <span id="e-camara-txt">Activar cámara</span>
+          </button>
+          <div id="visor" hidden><div id="lector"></div></div>
+        </div>
+        <div class="stack" style="gap:12px">
+          <div class="chips fijos" id="e-conteo"></div>
+          <h3>Últimos escaneos</h3>
+          <ul class="recientes" id="e-recientes"></ul>
+          <button class="btn" id="e-ver-lista" type="button">Ver la lista completa</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ALUMNOS ===================== -->
+  <section id="v-alumnos" class="wrap" hidden>
+    <div class="barra">
+      <label class="campo">Grupo<select id="l-grupo"></select></label>
+      <button class="btn" id="l-nuevo-grupo" type="button">Nuevo grupo</button>
+      <button class="btn" id="l-actualizar" type="button">Actualizar datos</button>
+    </div>
+    <div class="barra">
+      <label class="campo">Buscar<input type="search" id="l-buscar" placeholder="Nombre, apellido o matrícula"></label>
+      <button class="btn primario" id="l-agregar" type="button">Agregar alumnos</button>
+      <button class="btn suave" id="l-imprimir" type="button">Imprimir gafetes</button>
+    </div>
+    <ul class="alumnos" id="l-lista"></ul>
+  </section>
+
+  <!-- ===================== CONECTAR (solo la primera vez en cada dispositivo) ===================== -->
+  <section id="v-conectar" class="wrap" hidden>
+    <div class="card stack" style="max-width:560px;margin:6vh auto 0">
+      <h2>Conecta este dispositivo</h2>
+      <p class="nota">Se hace una sola vez en cada dispositivo. Al terminar, esta pantalla ya no vuelve a aparecer.</p>
+      <label class="campo">URL de la aplicación web<input type="url" id="c-url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off"></label>
+      <label class="campo">Token<input type="password" id="c-token" autocomplete="off"></label>
+      <button class="btn primario grande" id="c-guardar" type="button">Conectar</button>
+      <p class="nota" id="c-estado" role="status"></p>
+    </div>
+  </section>
+</main>
+
+<nav class="nav" aria-label="Secciones">
+  <button type="button" data-vista="asistencia" aria-current="page">
+    <svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>Asistencia
+  </button>
+  <button type="button" data-vista="escanear">
+    <svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M4 12h16"/></svg>Escanear
+  </button>
+  <button type="button" data-vista="alumnos">
+    <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Alumnos
+  </button>
+</nav>
+
+<dialog id="hoja"><div class="hoja" id="hoja-cuerpo"></div></dialog>
+<div id="toast" role="status" hidden></div>
+<div id="impresion" aria-hidden="true"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+'use strict';
+
+/* ============================================================
+ * Utilidades
+ * ============================================================ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LS = {
+  get(k, d) { try { const v = localStorage.getItem('aula.' + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('aula.' + k, JSON.stringify(v)); } catch {} }
+};
+const pad = n => String(n).padStart(2, '0');
+const fechaLocal = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const horaLocal = (d = new Date()) => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const marcaLocal = (d = new Date()) => `${fechaLocal(d)} ${horaLocal(d)}:${pad(d.getSeconds())}`;
+const minutos = hhmm => { const [h, m] = String(hhmm || '0:0').split(':'); return (+h) * 60 + (+m); };
+const fechaLarga = f => new Date(f + 'T00:00').toLocaleDateString('es-GT', { weekday: 'long', day: 'numeric', month: 'long' });
+
+const ETQ = { PRESENTE: 'Presente', RETARDO: 'Retardo', ENFERMEDAD: 'Enfermedad', SIN_EXCUSA: 'Sin excusa', PENDIENTE: 'Sin registrar' };
+const CLASE = { PRESENTE: 'ok', RETARDO: 'tarde', ENFERMEDAD: 'enf', SIN_EXCUSA: 'falta', PENDIENTE: 'pend' };
+const AVISO_ETQ = { MADRE: 'Madre', PADRE: 'Padre', TUTOR: 'Tutor o tutora', FAMILIAR: 'Otro familiar', OTRO: 'Otra persona', NADIE: 'Nadie avisó' };
+
+const MENSAJES = {
+  NO_AUTORIZADO: 'El token no es correcto.',
+  SESION_CERRADA: 'La lista está cerrada. Reábrela para editar.',
+  ALUMNO_OTRO_GRUPO: 'Ese alumno no pertenece a este grupo.',
+  ALUMNO_INACTIVO: 'Ese alumno está dado de baja.',
+  MOTIVO_REQUERIDO: 'Falta indicar el motivo de la falta.',
+  AVISO_REQUERIDO: 'Indica quién avisó de la enfermedad.',
+  AVISO_NOMBRE_REQUERIDO: 'Escribe el nombre de quien avisó.',
+  GRUPO_DUPLICADO: 'Ya existe un grupo con ese nombre y ciclo.',
+  NOMBRE_REQUERIDO: 'Escribe un nombre.',
+  FECHA_INVALIDA: 'La fecha no es válida.',
+  GRUPO_NO_EXISTE: 'El grupo no existe. Usa “Actualizar datos” en la pestaña Alumnos.',
+  SESION_NO_EXISTE: 'La lista no existe. Vuelve a abrirla.'
+};
+const mensajeError = e => {
+  if (e instanceof ErrorRed) return e.message;
+  const c = String(e.message || e);
+  if (c.startsWith('HAY_PENDIENTES')) return 'Aún hay alumnos sin registrar.';
+  return MENSAJES[c.split(':')[0]] || c;
+};
+
+/* ============================================================
+ * Estado
+ * ============================================================ */
+const S = {
+  url: LS.get('url', ''), token: LS.get('token', ''),
+  grupos: LS.get('grupos', []), alumnos: LS.get('alumnos', []), config: LS.get('config', { tolerancia_min: 10 }),
+  grupoId: LS.get('grupoId', ''),
+  sesion: null, asis: new Map(), filtro: 'todos', recientes: [], recSesion: '', probando: false, iniciando: false,
+  cola: LS.get('cola', []), enLinea: navigator.onLine, escaneando: false
+};
+const conectado = () => !!(S.url && S.token);
+
+/* ============================================================
+ * API (Apps Script) y cola de envío
+ * ============================================================ */
+class ErrorRed extends Error {}
+class ErrorAuth extends ErrorRed {}   // token rechazado: se conserva la cola, no se pierde nada
+
+async function llamar(accion, datos = {}, timeout = 25000) {
+  if (!conectado()) throw new ErrorRed('Este dispositivo aún no está conectado.');
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), timeout);
+  let resp;
+  try {
+    resp = await fetch(S.url, {
+      method: 'POST', redirect: 'follow', signal: ctl.signal,
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },   // evita el "preflight" de CORS
+      body: JSON.stringify({ action: accion, token: S.token, ...datos })
+    });
+  } catch { throw new ErrorRed('Sin conexión con el servidor.'); }
+  finally { clearTimeout(t); }
+  let json;
+  try { json = await resp.json(); } catch { throw new ErrorRed('El servidor respondió algo inesperado. Revisa que la URL sea la de la aplicación web (/exec).'); }
+  if (!json.ok) {
+    if (json.error === 'NO_AUTORIZADO') {
+      if (!S.probando) pedirReconexion();
+      throw new ErrorAuth('El token no es correcto.');
+    }
+    throw new Error(json.error);
+  }
+  return json.data;
+}
+
+const guardarCola = () => { LS.set('cola', S.cola); pintarSync(); };
+function encolar(accion, datos) {
+  S.cola.push({ accion, datos });
+  guardarCola();
+  vaciarCola();
+}
+
+let vaciando = null;
+function vaciarCola() {
+  if (vaciando) return vaciando;
+  const p = (async () => {
+    while (S.cola.length) {
+      const it = S.cola[0];
+      try {
+        const r = await llamar(it.accion, it.datos);
+        S.cola.shift();
+        aplicarRespuesta(it, r);
+      } catch (e) {
+        if (e instanceof ErrorRed) break;            // sin red: se conserva y se reintenta
+        S.cola.shift();                              // el servidor lo rechazó: no se reintenta
+        toast('No se guardó: ' + mensajeError(e), true);
+        if (S.sesion) recargarSesion();
+      }
+      guardarCola();
+    }
+  })().finally(() => { vaciando = null; guardarCola(); });
+  vaciando = p;   // se asigna antes de que corra el finally
+  return p;
+}
+
+function aplicarRespuesta(it, r) {
+  if (!S.sesion || it.datos.id_sesion !== S.sesion.id_sesion) return;
+  const lista = it.accion === 'registrarLote' ? r.asistencias : [r.asistencia];
+  lista.forEach(a => S.asis.set(a.id_alumno, a));
+  pintarLista();
+}
+
+const pendientesEnvio = () => new Set(S.cola.flatMap(it => it.accion === 'registrar' ? [it.datos.id_alumno] : it.accion === 'registrarLote' ? it.datos.items.map(x => x.id_alumno) : []));
+
+/* ============================================================
+ * Interfaz general
+ * ============================================================ */
+let toastT;
+function toast(msg, error = false) {
+  const t = $('#toast');
+  t.textContent = msg; t.className = error ? 'error' : ''; t.hidden = false;
+  clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, error ? 5000 : 2600);
+}
+
+function pintarSync() {
+  const b = $('#sync'), txt = $('span', b);
+  b.classList.remove('off', 'cola');
+  if (S.cola.length) { b.classList.add('cola'); txt.textContent = `${S.cola.length} por enviar`; }
+  else if (!S.enLinea) { b.classList.add('off'); txt.textContent = 'Sin conexión'; }
+  else txt.textContent = conectado() ? 'En línea' : 'Sin conectar';
+}
+addEventListener('online', () => { S.enLinea = true; pintarSync(); vaciarCola(); });
+addEventListener('offline', () => { S.enLinea = false; pintarSync(); });
+
+const TITULOS = { asistencia: 'Asistencia', escanear: 'Escanear', alumnos: 'Alumnos', conectar: 'Conectar' };
+function irA(vista) {
+  if (!conectado()) vista = 'conectar';
+  document.body.classList.toggle('sin-conexion', !conectado());
+  if (vista !== 'escanear') detenerEscaner();
+  ['asistencia', 'escanear', 'alumnos', 'conectar'].forEach(v => $('#v-' + v).hidden = v !== vista);
+  $$('.nav button').forEach(b => b.dataset.vista === vista ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
+  $('#titulo').textContent = TITULOS[vista];
+  if (vista === 'asistencia' && !S.sesion) { $('#a-fecha').value = fechaLocal(); $('#a-hora').value = horaLocal(); }
+  if (vista === 'alumnos') pintarAlumnos();
+  if (vista === 'escanear') { pintarEscaner(); if (abierta()) iniciarEscaner(); }
+  if (vista === 'conectar') pintarConectar();
+  scrollTo(0, 0);
+}
+$$('.nav button').forEach(b => b.addEventListener('click', () => irA(b.dataset.vista)));
+
+const alumnosDe = gid => S.alumnos.filter(a => a.id_grupo === gid)
+  .sort((a, b) => (a.apellidos + ' ' + a.nombres).localeCompare(b.apellidos + ' ' + b.nombres, 'es'));
+const nombreCompleto = a => `${a.apellidos ? a.apellidos + ', ' : ''}${a.nombres}`;
+const alumnoPorId = id => S.alumnos.find(a => a.id_alumno === id);
+const grupoPorId = id => S.grupos.find(g => g.id_grupo === id);
+const nombreGrupo = g => g ? g.nombre + (g.ciclo ? ' · ' + g.ciclo : '') : '';
+
+function opcionesGrupo(sel) {
+  sel.innerHTML = S.grupos.length
+    ? S.grupos.map(g => `<option value="${esc(g.id_grupo)}">${esc(nombreGrupo(g))}</option>`).join('')
+    : '<option value="">Sin grupos todavía</option>';
+  if (S.grupos.some(g => g.id_grupo === S.grupoId)) sel.value = S.grupoId;
+  else { S.grupoId = S.grupos[0]?.id_grupo || ''; sel.value = S.grupoId; }
+}
+const pintarSelectoresGrupo = () => ['#a-grupo', '#e-grupo', '#l-grupo'].forEach(i => opcionesGrupo($(i)));
+function cambiarGrupo(id) {
+  S.grupoId = id; LS.set('grupoId', id);
+  pintarSelectoresGrupo();
+  if (S.sesion && S.sesion.id_grupo !== id) cerrarVistaSesion();
+  pintarAlumnos();
+}
+$('#a-grupo').addEventListener('change', e => cambiarGrupo(e.target.value));
+$('#l-grupo').addEventListener('change', e => cambiarGrupo(e.target.value));
+$('#e-grupo').addEventListener('change', e => cambiarGrupo(e.target.value));
+
+/* ============================================================
+ * Carga inicial
+ * ============================================================ */
+async function cargarBase(silencioso = false) {
+  const d = await llamar('bootstrap');
+  S.grupos = d.grupos; S.alumnos = d.alumnos; S.config = d.config;
+  LS.set('grupos', S.grupos); LS.set('alumnos', S.alumnos); LS.set('config', S.config);
+  pintarSelectoresGrupo();
+  pintarAlumnos();
+  if (!silencioso) toast('Datos actualizados');
+}
+
+/* ============================================================
+ * ASISTENCIA
+ * ============================================================ */
+function estadoVisual(r) {
+  if (!r) return 'PENDIENTE';
+  if (r.estado === 'AUSENTE') return r.motivo === 'ENFERMEDAD' ? 'ENFERMEDAD' : 'SIN_EXCUSA';
+  return r.estado;
+}
+const abierta = () => S.sesion && S.sesion.estado === 'ABIERTA';
+
+async function abrirLista() {
+  const id_grupo = $('#a-grupo').value, fecha = $('#a-fecha').value, hora = $('#a-hora').value;
+  if (!id_grupo) return toast('Primero crea un grupo en la pestaña Alumnos.', true);
+  if (!fecha) return toast('Elige una fecha.', true);
+  const b = $('#a-abrir'); b.disabled = true; b.textContent = 'Abriendo…';
+  try {
+    await vaciarCola();
+    const d = await llamar('abrirSesion', { id_grupo, fecha, hora });
+    S.sesion = d.sesion;
+    S.asis = new Map(d.asistencias.map(a => [a.id_alumno, a]));
+    S.filtro = 'todos';
+    if (!alumnosDe(id_grupo).length) toast('Este grupo aún no tiene alumnos.', true);
+    pintarSesion();
+    if (!d.creada) toast('Lista de esa fecha recuperada');
+  } catch (e) { toast(mensajeError(e), true); }
+  finally { b.disabled = false; b.textContent = 'Abrir lista'; }
+}
+$('#a-abrir').addEventListener('click', abrirLista);
+
+async function recargarSesion() {
+  if (!S.sesion) return;
+  try {
+    const d = await llamar('abrirSesion', { id_grupo: S.sesion.id_grupo, fecha: S.sesion.fecha });
+    S.sesion = d.sesion; S.asis = new Map(d.asistencias.map(a => [a.id_alumno, a])); pintarSesion();
+  } catch {}
+}
+
+function cerrarVistaSesion() {
+  detenerEscaner(); S.sesion = null; S.asis = new Map();
+  $('#a-sesion').hidden = true; $('#a-vacio').hidden = false;
+  pintarEscaner();
+}
+
+function pintarSesion() {
+  $('#a-vacio').hidden = true; $('#a-sesion').hidden = false;
+  const g = grupoPorId(S.sesion.id_grupo);
+  $('#a-info').textContent = `${nombreGrupo(g)} · ${fechaLarga(S.sesion.fecha)} · inicio ${S.sesion.hora_inicio}`;
+  const et = $('#a-estado');
+  et.textContent = abierta() ? 'Lista abierta' : 'Lista cerrada';
+  et.classList.toggle('cerrada', !abierta());
+  if (S.recSesion !== S.sesion.id_sesion) { S.recientes = []; S.recSesion = S.sesion.id_sesion; }
+  reiniciarLectura();
+  pintarLista();
+}
+
+function conteos() {
+  const c = { todos: 0, PRESENTE: 0, RETARDO: 0, AUSENTE: 0, PENDIENTE: 0 };
+  alumnosDe(S.sesion.id_grupo).forEach(a => {
+    const r = S.asis.get(a.id_alumno);
+    c.todos++;
+    c[r ? r.estado : 'PENDIENTE']++;
+  });
+  return c;
+}
+
+function pintarLista() {
+  if (!S.sesion) return;
+  const c = conteos();
+  const chips = [['todos', 'Todos'], ['PRESENTE', 'Presentes'], ['RETARDO', 'Retardos'], ['AUSENTE', 'Ausentes'], ['PENDIENTE', 'Sin registrar']];
+  $('#a-chips').innerHTML = chips.map(([k, t]) =>
+    `<button class="chip" type="button" data-f="${k}" aria-pressed="${S.filtro === k}"><b>${c[k]}</b><span>${t}</span></button>`).join('');
+
+  const enviando = pendientesEnvio();
+  const filas = alumnosDe(S.sesion.id_grupo).filter(a => {
+    const r = S.asis.get(a.id_alumno);
+    return S.filtro === 'todos' || (r ? r.estado : 'PENDIENTE') === S.filtro;
+  });
+  $('#a-lista').innerHTML = filas.length ? filas.map(a => {
+    const r = S.asis.get(a.id_alumno), v = estadoVisual(r);
+    let sub = a.matricula ? 'Matrícula ' + esc(a.matricula) : esc(a.id_alumno);
+    if (v === 'ENFERMEDAD') sub = 'Avisó: ' + esc(AVISO_ETQ[r.avisado_por] || '—') + (r.avisado_nombre ? ' (' + esc(r.avisado_nombre) + ')' : '');
+    else if (r && r.estado !== 'AUSENTE') sub = (r.metodo === 'QR' ? 'Escaneado ' : 'Marcado ') + esc((r.registrado_en || '').slice(11, 16));
+    const nube = enviando.has(a.id_alumno)
+      ? '<svg class="nube" viewBox="0 0 24 24" aria-label="Por enviar"><path d="M18 10a6 6 0 0 0-11.5-1.5A4.5 4.5 0 0 0 7 17h11a3.5 3.5 0 0 0 0-7z"/></svg>' : '';
+    return `<li><button class="fila ${CLASE[v]}" type="button" data-id="${esc(a.id_alumno)}">
+      <span class="nombre">${esc(nombreCompleto(a))}</span>
+      <span class="estado">${nube}<span class="pill ${CLASE[v]}">${ETQ[v]}</span></span>
+      <span class="sub">${sub}</span></button></li>`;
+  }).join('') : `<li class="vacio"><strong>${S.filtro === 'todos' ? 'Sin alumnos en este grupo' : 'Nadie en esta categoría'}</strong>${S.filtro === 'todos' ? 'Agrégalos en la pestaña Alumnos.' : ''}</li>`;
+
+  $('#a-pie').innerHTML = abierta()
+    ? `<button class="btn ${c.PENDIENTE ? '' : 'primario'} grande" id="a-cerrar" type="button">Cerrar lista${c.PENDIENTE ? ` (faltan ${c.PENDIENTE})` : ''}</button>`
+    : `<button class="btn grande" id="a-reabrir" type="button">Reabrir lista para editar</button>`;
+  pintarEscaner();
+}
+
+function pintarEscaner() {
+  const hay = !!S.sesion;
+  $('#e-sin').hidden = hay; $('#e-con').hidden = !hay;
+  if (!hay) return;
+  $('#e-info').textContent = `${nombreGrupo(grupoPorId(S.sesion.id_grupo))} · ${fechaLarga(S.sesion.fecha)}`;
+  const et = $('#e-estado');
+  et.textContent = abierta() ? 'Lista abierta' : 'Lista cerrada';
+  et.classList.toggle('cerrada', !abierta());
+  $('#e-camara').disabled = !abierta();
+  const c = conteos();
+  $('#e-conteo').innerHTML = [['Presentes', c.PRESENTE], ['Retardos', c.RETARDO], ['Faltan', c.PENDIENTE]]
+    .map(([t, n]) => `<div class="chip"><b>${n}</b><span>${t}</span></div>`).join('');
+  $('#e-recientes').innerHTML = S.recientes.length ? S.recientes.map(id => {
+    const a = alumnoPorId(id); if (!a) return '';
+    const v = estadoVisual(S.asis.get(id));
+    return `<li><span class="nombre">${esc(nombreCompleto(a))}</span><span class="pill ${CLASE[v]}">${ETQ[v]}</span></li>`;
+  }).join('') : '<li class="nota">Aquí verás los últimos gafetes escaneados.</li>';
+}
+$('#a-ir-escanear').addEventListener('click', () => irA('escanear'));
+$('#e-ver-lista').addEventListener('click', () => irA('asistencia'));
+$('#e-iniciar').addEventListener('click', async () => {
+  const id = $('#e-grupo').value;
+  if (!id) return toast('Primero crea un grupo en la pestaña Alumnos.', true);
+  $('#a-grupo').value = id; $('#a-fecha').value = fechaLocal(); $('#a-hora').value = horaLocal();
+  const b = $('#e-iniciar'); b.disabled = true;
+  await abrirLista();
+  b.disabled = false;
+  if (abierta()) iniciarEscaner();
+});
+$('#a-chips').addEventListener('click', e => {
+  const b = e.target.closest('[data-f]'); if (!b) return;
+  S.filtro = b.dataset.f; pintarLista();
+});
+$('#a-lista').addEventListener('click', e => {
+  const b = e.target.closest('[data-id]'); if (b) abrirRegistro(b.dataset.id);
+});
+$('#a-pie').addEventListener('click', e => {
+  if (e.target.closest('#a-cerrar')) cerrarLista();
+  if (e.target.closest('#a-reabrir')) reabrirLista();
+});
+
+/* ---- Registrar (escaneo o manual). Siempre pasa por la cola: ordenado y sin perder datos ---- */
+function calcularAuto(ts) {
+  if (ts.slice(0, 10) !== S.sesion.fecha) return 'PRESENTE';
+  return minutos(ts.slice(11, 16)) > minutos(S.sesion.hora_inicio) + Number(S.config.tolerancia_min || 0) ? 'RETARDO' : 'PRESENTE';
+}
+
+function registrar(alumno, datos, metodo) {
+  const ts = marcaLocal();
+  const previo = S.asis.get(alumno.id_alumno);
+  const estado = datos.estado === 'AUTO' ? calcularAuto(ts) : datos.estado;
+  S.asis.set(alumno.id_alumno, {
+    ...(previo || {}), id_alumno: alumno.id_alumno, id_sesion: S.sesion.id_sesion, estado,
+    motivo: datos.motivo || '', avisado_por: datos.avisado_por || '', avisado_nombre: datos.avisado_nombre || '',
+    nota: datos.nota || '', metodo, registrado_en: previo?.registrado_en || ts
+  });
+  encolar('registrar', { id_sesion: S.sesion.id_sesion, id_alumno: alumno.id_alumno, metodo, ts, ...datos });
+  pintarLista();
+  return estado;
+}
+
+/* ---- Hoja de registro manual ---- */
+const dlg = $('#hoja'), cuerpo = $('#hoja-cuerpo');
+function abrirHoja(html) { cuerpo.innerHTML = html; if (!dlg.open) dlg.showModal(); }
+function cerrarHoja() { if (dlg.open) dlg.close(); }
+dlg.addEventListener('click', e => { if (e.target === dlg) cerrarHoja(); });
+
+function abrirRegistro(id) {
+  const a = alumnoPorId(id), r = S.asis.get(id);
+  const bloq = !abierta();
+  let sel = r ? estadoVisual(r) : '';
+  const op = (v, txt, cl) => `<label class="opcion"><input type="radio" name="est" value="${v}" ${sel === v ? 'checked' : ''} ${bloq ? 'disabled' : ''}><span class="${cl}">${txt}</span></label>`;
+  const av = k => `<label class="opcion"><input type="radio" name="avi" value="${k}" ${r?.avisado_por === k ? 'checked' : ''} ${bloq ? 'disabled' : ''}><span class="neutro">${AVISO_ETQ[k]}</span></label>`;
+  abrirHoja(`
+    <div><h2>${esc(nombreCompleto(a))}</h2>
+    <p class="nota">${esc(a.id_alumno)}${r ? ' · ' + (r.metodo === 'QR' ? 'escaneado' : 'marcado a mano') + ' ' + esc((r.registrado_en || '').slice(11, 16)) : ' · sin registrar'}</p></div>
+    ${bloq ? '<p class="nota">La lista está cerrada. Reábrela para cambiar este registro.</p>' : ''}
+    <div class="opciones" role="radiogroup" aria-label="Asistencia">
+      ${op('PRESENTE', 'Presente', 'ok')}${op('RETARDO', 'Retardo', 'tarde')}
+      ${op('ENFERMEDAD', 'Falta por enfermedad', 'enf')}${op('SIN_EXCUSA', 'Falta sin excusa', 'falta')}
+    </div>
+    <div id="bloque-aviso" class="stack" style="gap:10px" ${sel === 'ENFERMEDAD' ? '' : 'hidden'}>
+      <strong>¿Quién avisó?</strong>
+      <div class="opciones tres-col" role="radiogroup" aria-label="Quién avisó">${['MADRE','PADRE','TUTOR','FAMILIAR','OTRO','NADIE'].map(av).join('')}</div>
+      <label class="campo" id="campo-aviso-nombre" hidden>Nombre de quien avisó
+        <input type="text" id="aviso-nombre" maxlength="80" value="${esc(r?.avisado_nombre || '')}" ${bloq ? 'disabled' : ''}></label>
+    </div>
+    <label class="campo">Nota (opcional)<input type="text" id="reg-nota" maxlength="300" value="${esc(r?.nota || '')}" ${bloq ? 'disabled' : ''}></label>
+    <div class="acciones">
+      <button class="btn" type="button" id="reg-cancelar">${bloq ? 'Cerrar' : 'Cancelar'}</button>
+      ${bloq ? '' : '<button class="btn primario" type="button" id="reg-guardar">Guardar</button>'}
+    </div>`);
+
+  const actualizar = () => {
+    const est = $('input[name=est]:checked', cuerpo)?.value;
+    $('#bloque-aviso', cuerpo).hidden = est !== 'ENFERMEDAD';
+    const avi = $('input[name=avi]:checked', cuerpo)?.value;
+    $('#campo-aviso-nombre', cuerpo).hidden = !(avi && avi !== 'NADIE');
+  };
+  cuerpo.onchange = actualizar; actualizar();
+  $('#reg-cancelar', cuerpo).onclick = cerrarHoja;
+  const g = $('#reg-guardar', cuerpo);
+  if (g) g.onclick = () => {
+    const est = $('input[name=est]:checked', cuerpo)?.value;
+    if (!est) return toast('Elige una opción.', true);
+    const nota = $('#reg-nota', cuerpo).value.trim();
+    let datos;
+    if (est === 'PRESENTE' || est === 'RETARDO') datos = { estado: est, nota };
+    else if (est === 'SIN_EXCUSA') datos = { estado: 'AUSENTE', motivo: 'SIN_EXCUSA', nota };
+    else {
+      const avisado_por = $('input[name=avi]:checked', cuerpo)?.value;
+      const avisado_nombre = $('#aviso-nombre', cuerpo).value.trim();
+      if (!avisado_por) return toast('Indica quién avisó de la enfermedad.', true);
+      if (avisado_por === 'OTRO' && !avisado_nombre) return toast('Escribe el nombre de quien avisó.', true);
+      datos = { estado: 'AUSENTE', motivo: 'ENFERMEDAD', avisado_por, avisado_nombre: avisado_por === 'NADIE' ? '' : avisado_nombre, nota };
+    }
+    registrar(a, datos, 'MANUAL');
+    cerrarHoja();
+  };
+}
+
+/* ---- Cerrar y reabrir ---- */
+async function cerrarLista() {
+  const pend = alumnosDe(S.sesion.id_grupo).filter(a => !S.asis.has(a.id_alumno));
+  if (pend.length) {
+    abrirHoja(`
+      <h2>Faltan ${pend.length} alumno${pend.length > 1 ? 's' : ''} por registrar</h2>
+      <p class="nota">Cada falta necesita un motivo. Puedes revisarlos uno por uno o marcar a todos como falta sin excusa.</p>
+      <div class="acciones" style="flex-direction:column">
+        <button class="btn primario" type="button" id="p-revisar">Revisar los pendientes</button>
+        <button class="btn peligro" type="button" id="p-todos">Marcar ${pend.length > 1 ? 'todos' : 'al alumno'} como falta sin excusa</button>
+        <button class="btn" type="button" id="p-cancelar">Cancelar</button>
+      </div>`);
+    $('#p-revisar', cuerpo).onclick = () => { cerrarHoja(); S.filtro = 'PENDIENTE'; pintarLista(); };
+    $('#p-cancelar', cuerpo).onclick = cerrarHoja;
+    $('#p-todos', cuerpo).onclick = () => {
+      cerrarHoja();
+      const items = pend.map(a => ({ id_alumno: a.id_alumno, estado: 'AUSENTE', motivo: 'SIN_EXCUSA', metodo: 'MANUAL', ts: marcaLocal() }));
+      items.forEach(it => S.asis.set(it.id_alumno, { id_alumno: it.id_alumno, id_sesion: S.sesion.id_sesion, estado: 'AUSENTE', motivo: 'SIN_EXCUSA', metodo: 'MANUAL', registrado_en: it.ts }));
+      encolar('registrarLote', { id_sesion: S.sesion.id_sesion, items });
+      pintarLista();
+      confirmarCierre();
+    };
+    return;
+  }
+  confirmarCierre();
+}
+
+function confirmarCierre() {
+  const c = conteos();
+  abrirHoja(`
+    <h2>¿Cerrar la lista?</h2>
+    <p>${c.PRESENTE} presentes, ${c.RETARDO} con retardo y ${c.AUSENTE} ausentes.</p>
+    <p class="nota">Podrás reabrirla si necesitas corregir algo.</p>
+    <div class="acciones"><button class="btn" type="button" id="c-no">Seguir editando</button><button class="btn primario" type="button" id="c-si">Cerrar lista</button></div>`);
+  $('#c-no', cuerpo).onclick = cerrarHoja;
+  $('#c-si', cuerpo).onclick = async () => {
+    const b = $('#c-si', cuerpo); b.disabled = true; b.textContent = 'Cerrando…';
+    try {
+      await vaciarCola();
+      if (S.cola.length) throw new ErrorRed('Hay registros sin enviar. Conéctate a internet e inténtalo de nuevo.');
+      const d = await llamar('estadoSesion', { id_sesion: S.sesion.id_sesion, estado: 'CERRADA' });
+      S.sesion = d.sesion; detenerEscaner(); cerrarHoja(); pintarSesion(); toast('Lista cerrada');
+    } catch (e) { cerrarHoja(); toast(mensajeError(e), true); }
+  };
+}
+
+async function reabrirLista() {
+  try {
+    const d = await llamar('estadoSesion', { id_sesion: S.sesion.id_sesion, estado: 'ABIERTA' });
+    S.sesion = d.sesion; pintarSesion(); toast('Lista reabierta');
+  } catch (e) { toast(mensajeError(e), true); }
+}
+
+/* ============================================================
+ * ESCÁNER QR
+ * ============================================================ */
+let lector = null, ultimo = { codigo: '', t: 0 }, audioCtx = null;
+
+function tono(freq, dur, delay = 0) {
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.frequency.value = freq; o.type = 'sine'; g.gain.value = .12;
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(audioCtx.currentTime + delay); o.stop(audioCtx.currentTime + delay + dur);
+  } catch {}
+}
+const sonar = tipo => {
+  if (tipo === 'ok') { tono(880, .09); navigator.vibrate?.(40); }
+  else if (tipo === 'tarde') { tono(660, .09); tono(660, .09, .13); navigator.vibrate?.([40, 60, 40]); }
+  else if (tipo === 'aviso') { tono(520, .12); }
+  else { tono(220, .18); tono(180, .22, .2); navigator.vibrate?.(200); }
+};
+
+function mostrarLectura(clase, titulo, detalle) {
+  const l = $('#lectura');
+  l.className = 'lectura ' + clase; l.classList.remove('pop'); void l.offsetWidth; l.classList.add('pop');
+  l.innerHTML = `<strong>${esc(titulo)}</strong><span>${esc(detalle)}</span>`;
+}
+function reiniciarLectura() {
+  const l = $('#lectura'); l.className = 'lectura aviso';
+  l.innerHTML = abierta() ? '<strong>Listo para escanear</strong><span>Acerca el gafete a la cámara.</span>'
+                          : '<strong>Lista cerrada</strong><span>Reábrela para volver a registrar.</span>';
+}
+
+async function iniciarEscaner() {
+  if (!abierta() || S.escaneando || S.iniciando) return;
+  if (typeof Html5Qrcode === 'undefined') return toast('El lector no se cargó. Conéctate a internet una vez y recarga la página.', true);
+  S.iniciando = true;
+  tono(1, .01); // desbloquea el audio en iOS con este toque
+  $('#visor').hidden = false;
+  try {
+    lector = lector || new Html5Qrcode('lector', { formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE], verbose: false });
+    await lector.start({ facingMode: 'environment' },
+      { fps: 12, qrbox: (w, h) => { const m = Math.floor(Math.min(w, h) * .7); return { width: m, height: m }; } },
+      alLeer, () => {});
+    S.escaneando = true; $('#e-camara-txt').textContent = 'Detener cámara';
+  } catch (e) {
+    $('#visor').hidden = true;
+    toast('No se pudo abrir la cámara. Revisa el permiso del navegador y que la página use https.', true);
+  } finally { S.iniciando = false; }
+}
+async function detenerEscaner() {
+  if (lector && S.escaneando) { try { await lector.stop(); } catch {} }
+  S.escaneando = false; $('#visor').hidden = true; $('#e-camara-txt').textContent = 'Activar cámara';
+}
+$('#e-camara').addEventListener('click', () => S.escaneando ? detenerEscaner() : iniciarEscaner());
+// Al bloquear el teléfono o cambiar de app la cámara se apaga; al volver se reactiva sola.
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) detenerEscaner();
+  else if (!$('#v-escanear').hidden && abierta()) iniciarEscaner();
+});
+
+function alLeer(texto) {
+  const codigo = String(texto).trim(), ahora = Date.now();
+  if (codigo === ultimo.codigo && ahora - ultimo.t < 3000) return;   // evita lecturas dobles
+  ultimo = { codigo, t: ahora };
+  procesarCodigo(codigo);
+}
+
+function procesarCodigo(codigo) {
+  if (!abierta()) return;
+  const id = (codigo.toUpperCase().match(/ALU-\d{6}/) || [])[0];
+  const a = id && alumnoPorId(id);
+  if (!a) { sonar('error'); return mostrarLectura('error', 'Código no reconocido', 'Este QR no es un gafete de Aula o el alumno no está en tus datos.'); }
+  if (a.id_grupo !== S.sesion.id_grupo) {
+    sonar('error');
+    return mostrarLectura('error', nombreCompleto(a), `Pertenece a ${nombreGrupo(grupoPorId(a.id_grupo)) || 'otro grupo'}, no a este.`);
+  }
+  const previo = S.asis.get(a.id_alumno);
+  if (previo && previo.estado !== 'AUSENTE') {
+    sonar('aviso');
+    return mostrarLectura('aviso', nombreCompleto(a), `Ya estaba registrado como ${ETQ[estadoVisual(previo)].toLowerCase()} a las ${(previo.registrado_en || '').slice(11, 16)}.`);
+  }
+  S.recientes = [a.id_alumno, ...S.recientes.filter(x => x !== a.id_alumno)].slice(0, 8);
+  const estado = registrar(a, { estado: 'AUTO' }, 'QR');
+  sonar(estado === 'RETARDO' ? 'tarde' : 'ok');
+  mostrarLectura(estado === 'RETARDO' ? 'tarde' : 'ok', nombreCompleto(a), `${ETQ[estado]} a las ${horaLocal()}`);
+}
+
+/* ============================================================
+ * ALUMNOS, GRUPOS Y GAFETES
+ * ============================================================ */
+function pintarAlumnos() {
+  const q = $('#l-buscar').value.trim().toLowerCase();
+  const filas = alumnosDe($('#l-grupo').value || S.grupoId).filter(a =>
+    !q || (a.nombres + ' ' + a.apellidos + ' ' + a.matricula + ' ' + a.id_alumno).toLowerCase().includes(q));
+  $('#l-lista').innerHTML = filas.length ? filas.map(a => `
+    <li class="fila-alumno">
+      <span class="nombre" style="font-weight:700">${esc(nombreCompleto(a))}</span>
+      <span class="id">${esc(a.id_alumno)}${a.matricula ? ' · matrícula ' + esc(a.matricula) : ''}</span>
+      <button class="btn" type="button" data-qr="${esc(a.id_alumno)}">Ver QR</button>
+    </li>`).join('')
+    : `<li class="vacio"><strong>${S.grupos.length ? 'No hay alumnos que mostrar' : 'Empieza creando un grupo'}</strong>${S.grupos.length ? 'Agrega alumnos con el botón de arriba.' : 'Usa “Nuevo grupo”.'}</li>`;
+}
+$('#l-buscar').addEventListener('input', pintarAlumnos);
+$('#l-lista').addEventListener('click', e => { const b = e.target.closest('[data-qr]'); if (b) verQR(b.dataset.qr); });
+
+function svgQR(texto) {
+  if (typeof qrcode === 'undefined') return '<p class="nota">No se cargó el generador de QR. Conéctate a internet y recarga.</p>';
+  const q = qrcode(0, 'M'); q.addData(texto); q.make();
+  return q.createSvgTag({ cellSize: 6, margin: 0, scalable: true });
+}
+
+function verQR(id) {
+  const a = alumnoPorId(id);
+  abrirHoja(`
+    <div class="qr-grande">${svgQR(a.id_alumno)}
+      <h2 style="text-align:center">${esc(a.nombres + ' ' + a.apellidos)}</h2>
+      <p class="nota">${esc(a.id_alumno)} · ${esc(nombreGrupo(grupoPorId(a.id_grupo)))}</p></div>
+    <div class="acciones"><button class="btn" type="button" id="q-cerrar">Cerrar</button><button class="btn primario" type="button" id="q-imp">Imprimir este gafete</button></div>`);
+  $('#q-cerrar', cuerpo).onclick = cerrarHoja;
+  $('#q-imp', cuerpo).onclick = () => { cerrarHoja(); imprimir([a]); };
+}
+
+function imprimir(lista) {
+  if (!lista.length) return toast('No hay alumnos para imprimir.', true);
+  $('#impresion').innerHTML = lista.map(a => `
+    <div class="gafete"><div><div class="g-nombre">${esc(a.nombres)}<br>${esc(a.apellidos)}</div>
+      <div class="g-dato">${esc(nombreGrupo(grupoPorId(a.id_grupo)))}</div>
+      <div class="g-dato">${esc(a.id_alumno)}${a.matricula ? ' · ' + esc(a.matricula) : ''}</div></div>
+      ${svgQR(a.id_alumno)}</div>`).join('');
+  setTimeout(() => print(), 150);
+}
+$('#l-imprimir').addEventListener('click', () => imprimir(alumnosDe($('#l-grupo').value)));
+addEventListener('afterprint', () => { $('#impresion').innerHTML = ''; });
+
+/* ---- Agregar alumnos ---- */
+$('#l-agregar').addEventListener('click', () => {
+  const gid = $('#l-grupo').value;
+  if (!gid) return toast('Primero crea un grupo.', true);
+  abrirHoja(`
+    <h2>Agregar alumnos a ${esc(nombreGrupo(grupoPorId(gid)))}</h2>
+    <div class="pestanas" role="tablist">
+      <button type="button" role="tab" data-m="uno" aria-selected="true">Uno por uno</button>
+      <button type="button" role="tab" data-m="lista" aria-selected="false">Pegar lista</button>
+    </div>
+    <div id="m-uno" class="stack" style="gap:10px">
+      <label class="campo">Nombres<input type="text" id="n-nombres" maxlength="80" autocomplete="off"></label>
+      <label class="campo">Apellidos<input type="text" id="n-apellidos" maxlength="80" autocomplete="off"></label>
+      <label class="campo">Matrícula (opcional)<input type="text" id="n-matricula" maxlength="30" autocomplete="off"></label>
+    </div>
+    <div id="m-lista" class="stack" style="gap:10px" hidden>
+      <p class="nota">Una línea por alumno: <b>matrícula, nombres, apellidos</b>. Puedes pegarla desde Excel o Google Sheets. Si no hay matrícula, escribe solo <b>nombres, apellidos</b>.</p>
+      <textarea id="n-texto" placeholder="20240001, Ana María, López Pérez&#10;20240002, Carlos, Ramírez"></textarea>
+      <p class="nota" id="n-conteo"></p>
+    </div>
+    <div class="acciones"><button class="btn" type="button" id="n-cerrar">Listo</button><button class="btn primario" type="button" id="n-guardar">Guardar</button></div>`);
+  let modo = 'uno';
+  $$('.pestanas button', cuerpo).forEach(b => b.onclick = () => {
+    modo = b.dataset.m;
+    $$('.pestanas button', cuerpo).forEach(x => x.setAttribute('aria-selected', x === b));
+    $('#m-uno', cuerpo).hidden = modo !== 'uno'; $('#m-lista', cuerpo).hidden = modo !== 'lista';
+  });
+  const parsear = () => $('#n-texto', cuerpo).value.split(/\r?\n/).map(l => l.trim()).filter(Boolean).map(l => {
+    const p = l.split(/\t|;|,/).map(x => x.trim());
+    return p.length >= 3 ? { matricula: p[0], nombres: p[1], apellidos: p.slice(2).join(' ') }
+                         : { matricula: '', nombres: p[0] || '', apellidos: p[1] || '' };
+  });
+  $('#n-texto', cuerpo).oninput = () => { $('#n-conteo', cuerpo).textContent = `${parsear().length} alumno(s) listos para guardar`; };
+  $('#n-cerrar', cuerpo).onclick = cerrarHoja;
+  $('#n-guardar', cuerpo).onclick = async () => {
+    const alumnos = modo === 'uno'
+      ? [{ nombres: $('#n-nombres', cuerpo).value, apellidos: $('#n-apellidos', cuerpo).value, matricula: $('#n-matricula', cuerpo).value }]
+      : parsear();
+    if (!alumnos.length || !alumnos.every(a => a.nombres.trim())) return toast('Cada alumno necesita al menos un nombre.', true);
+    const b = $('#n-guardar', cuerpo); b.disabled = true; b.textContent = 'Guardando…';
+    try {
+      const d = await llamar('importarAlumnos', { id_grupo: gid, alumnos });
+      S.alumnos.push(...d.creados); LS.set('alumnos', S.alumnos); pintarAlumnos();
+      if (d.omitidos.length) toast(`${d.creados.length} agregados. Omitidos: ${d.omitidos.map(o => `fila ${o.fila} (${o.motivo})`).join('; ')}`, true);
+      else toast(`${d.creados.length} alumno(s) agregados`);
+      if (modo === 'uno') { ['n-nombres', 'n-apellidos', 'n-matricula'].forEach(i => $('#' + i, cuerpo).value = ''); $('#n-nombres', cuerpo).focus(); }
+      else cerrarHoja();
+    } catch (e) { toast(mensajeError(e), true); }
+    finally { b.disabled = false; b.textContent = 'Guardar'; }
+  };
+});
+
+/* ---- Nuevo grupo ---- */
+$('#l-nuevo-grupo').addEventListener('click', () => {
+  abrirHoja(`
+    <h2>Nuevo grupo</h2>
+    <label class="campo">Nombre del grupo<input type="text" id="g-nombre" maxlength="60" placeholder="Ej. 3.º A, Matemática" autocomplete="off"></label>
+    <label class="campo">Ciclo<input type="text" id="g-ciclo" maxlength="20" value="${new Date().getFullYear()}" autocomplete="off"></label>
+    <div class="acciones"><button class="btn" type="button" id="g-no">Cancelar</button><button class="btn primario" type="button" id="g-si">Crear grupo</button></div>`);
+  $('#g-no', cuerpo).onclick = cerrarHoja;
+  $('#g-si', cuerpo).onclick = async () => {
+    const b = $('#g-si', cuerpo); b.disabled = true;
+    try {
+      const d = await llamar('crearGrupo', { nombre: $('#g-nombre', cuerpo).value, ciclo: $('#g-ciclo', cuerpo).value });
+      S.grupos.push(d.grupo); LS.set('grupos', S.grupos); cambiarGrupo(d.grupo.id_grupo); cerrarHoja(); toast('Grupo creado');
+    } catch (e) { toast(mensajeError(e), true); b.disabled = false; }
+  };
+});
+
+/* ============================================================
+ * CONECTAR (pantalla de primera vez; después desaparece)
+ * ============================================================ */
+function pintarConectar(mensaje) {
+  $('#c-url').value = S.url; $('#c-token').value = '';
+  if (mensaje !== undefined) $('#c-estado').textContent = mensaje;
+}
+// Si el token deja de ser válido (por ejemplo lo regeneraste), se pide conectar de nuevo.
+// Los registros pendientes NO se pierden: se envían al reconectar.
+function pedirReconexion() {
+  S.token = ''; LS.set('token', '');
+  irA('conectar'); pintarConectar('El token cambió o ya no es válido. Vuelve a pegarlo para seguir. Tus registros pendientes están a salvo.');
+}
+$('#c-guardar').addEventListener('click', async () => {
+  const url = $('#c-url').value.trim(), token = $('#c-token').value.trim();
+  const estado = $('#c-estado');
+  if (!/^https:\/\/script\.google\.com\/.+\/exec$/.test(url)) return estado.textContent = 'La URL debe empezar con https://script.google.com y terminar en /exec.';
+  if (!token) return estado.textContent = 'Falta el token.';
+  const previo = { url: S.url, token: S.token };
+  S.url = url; S.token = token; S.probando = true;
+  const b = $('#c-guardar'); b.disabled = true; estado.textContent = 'Probando conexión…';
+  try {
+    await cargarBase(true);
+    LS.set('url', url); LS.set('token', token);
+    $('#c-token').value = '';
+    irA('asistencia'); pintarSync(); toast('Listo: este dispositivo quedó conectado');
+    vaciarCola();
+  } catch (e) {
+    S.url = previo.url; S.token = previo.token;
+    estado.textContent = 'No se pudo conectar: ' + mensajeError(e);
+  } finally { S.probando = false; b.disabled = false; }
+});
+$('#l-actualizar').addEventListener('click', () => cargarBase().catch(e => toast(mensajeError(e), true)));
+$('#sync').addEventListener('click', () => {
+  if (S.cola.length) { vaciarCola(); toast('Enviando registros pendientes…'); }
+  else toast(S.enLinea ? 'Todo está sincronizado' : 'Sin conexión: los registros se enviarán al volver internet', !S.enLinea);
+});
+
+/* ============================================================
+ * Arranque
+ * ============================================================ */
+/* Enlace de conexión: https://tu-sitio/#url=...&token=...  (el # nunca viaja al servidor; se borra al leerlo) */
+function importarConexionDesdeEnlace() {
+  if (!location.hash.includes('token=')) return;
+  const p = new URLSearchParams(location.hash.slice(1));
+  const url = (p.get('url') || '').trim(), token = (p.get('token') || '').trim();
+  history.replaceState(null, '', location.pathname + location.search);
+  if (/^https:\/\/script\.google\.com\/.+\/exec$/.test(url) && token) {
+    S.url = url; S.token = token; LS.set('url', url); LS.set('token', token);
+    setTimeout(() => toast('Conexión guardada en este dispositivo'), 400);
+  }
+}
+
+(async function iniciar() {
+  importarConexionDesdeEnlace();
+  $('#a-fecha').value = fechaLocal();
+  $('#a-hora').value = horaLocal();
+  pintarSelectoresGrupo();
+  pintarSync();
+  irA(conectado() ? 'asistencia' : 'conectar');
+  if (conectado()) {
+    try { await cargarBase(true); } catch (e) { if (!(e instanceof ErrorRed)) toast(mensajeError(e), true); }
+    vaciarCola();
+  }
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+})();
+</script>
+</body>
+</html>
