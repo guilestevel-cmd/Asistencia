@@ -70,7 +70,7 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
 .card{background:var(--superficie);border:1px solid var(--linea);border-radius:var(--radio);padding:16px}
 .stack{display:grid;gap:16px}
 .campos{display:grid;gap:12px;grid-template-columns:1fr}
-@media(min-width:640px){.campos.tres{grid-template-columns:2fr 1.2fr 1fr auto;align-items:end}}
+@media(min-width:640px){.campos.dos{grid-template-columns:2fr 1.2fr auto;align-items:end}}
 label.campo{display:grid;gap:4px;font-size:.9rem;color:var(--tinta-2)}
 input[type=text],input[type=url],input[type=date],input[type=time],input[type=search],input[type=password],select,textarea{
   width:100%;padding:11px 12px;border:1px solid var(--linea);border-radius:10px;background:var(--papel);color:var(--tinta);min-height:46px}
@@ -197,13 +197,13 @@ dialog::backdrop{background:rgba(10,20,25,.55)}
   </header>
 
   <section id="v-asistencia" class="wrap">
-   <div class="card">
-  <div class="campos" style="grid-template-columns: 2fr 1.2fr auto; align-items: end;">
-    <label class="campo">Grupo<select id="a-grupo"></select></label>
-    <label class="campo">Fecha<input type="date" id="a-fecha"></label>
-    <button class="btn primario" id="a-abrir" type="button">Abrir lista</button>
-  </div>
-</div>
+    <div class="card">
+      <div class="campos dos">
+        <label class="campo">Grupo<select id="a-grupo"></select></label>
+        <label class="campo">Fecha<input type="date" id="a-fecha"></label>
+        <button class="btn primario" id="a-abrir" type="button">Abrir lista</button>
+      </div>
+    </div>
 
     <div id="a-vacio" class="vacio">
       <strong>Elige un grupo y abre la lista</strong>
@@ -486,7 +486,7 @@ function irA(vista) {
   ['asistencia', 'escanear', 'alumnos', 'conectar'].forEach(v => $('#v-' + v).hidden = v !== vista);
   $$('.nav button').forEach(b => b.dataset.vista === vista ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
   $('#titulo').textContent = TITULOS[vista];
-  if (vista === 'asistencia' && !S.sesion) { $('#a-fecha').value = fechaLocal(); $('#a-hora').value = horaLocal(); }
+  if (vista === 'asistencia' && !S.sesion) { $('#a-fecha').value = fechaLocal(); }
   if (vista === 'alumnos') pintarAlumnos();
   if (vista === 'escanear') { pintarEscaner(); if (puedeEscanear()) iniciarEscaner(); }
   if (vista === 'conectar') pintarConectar();
@@ -522,16 +522,10 @@ $('#e-grupo').addEventListener('change', e => cambiarGrupo(e.target.value));
 async function cargarBase(silencioso = false) {
   const d = await llamar('bootstrap');
   S.grupos = d.grupos; S.alumnos = d.alumnos; 
-  
-  // Sincroniza la hora general directamente desde el servidor central
   if (d.config.hora_entrada_general) {
     S.config.hora_entrada_general = d.config.hora_entrada_general;
     LS.set('hora_general_local', d.config.hora_entrada_general);
-  } else {
-    // Si el servidor no la tiene, toma la guardada localmente o una por defecto
-    S.config.hora_entrada_general = S.config.hora_entrada_general || '07:00';
   }
-
   S.config.tolerancia_min = d.config.tolerancia_min;
   LS.set('grupos', S.grupos); LS.set('alumnos', S.alumnos); LS.set('config', S.config);
   pintarSelectoresGrupo();
@@ -548,9 +542,7 @@ const abierta = () => S.sesion && S.sesion.estado === 'ABIERTA';
 
 async function abrirLista() {
   const id_grupo = $('#a-grupo').value, fecha = $('#a-fecha').value;
-  // Toma por defecto la hora general del colegio o una por defecto de respaldo
-  const hora = S.config.hora_entrada_general || '07:00'; 
-  
+  const hora = S.config.hora_entrada_general || '07:00';
   if (!id_grupo) return toast('Primero crea un grupo en la pestaña Alumnos.', true);
   if (!fecha) return toast('Elige una fecha.', true);
   const b = $('#a-abrir'); b.disabled = true; b.textContent = 'Abriendo…';
@@ -585,7 +577,7 @@ function cerrarVistaSesion() {
 function pintarSesion() {
   $('#a-vacio').hidden = true; $('#a-sesion').hidden = false;
   const g = grupoPorId(S.sesion.id_grupo);
-  $('#a-info').textContent = `${nombreGrupo(g)} · ${fechaLarga(S.sesion.fecha)} · inicio ${S.sesion.hora_inicio}`;
+  $('#a-info').textContent = `${nombreGrupo(g)} · ${fechaLarga(S.sesion.fecha)} · Inicio ${S.sesion.hora_inicio}`;
   const et = $('#a-estado');
   et.textContent = abierta() ? 'Lista abierta' : 'Lista cerrada';
   et.classList.toggle('cerrada', !abierta());
@@ -752,7 +744,7 @@ $('#e-ver-lista').addEventListener('click', () => irA('asistencia'));
 $('#e-iniciar').addEventListener('click', async () => {
   const id = $('#e-grupo').value;
   if (!id) return toast('Primero crea un grupo en la pestaña Alumnos.', true);
-  $('#a-grupo').value = id; $('#a-fecha').value = fechaLocal(); $('#a-hora').value = S.config.hora_entrada_general || horaLocal();
+  $('#a-grupo').value = id; $('#a-fecha').value = fechaLocal();
   const b = $('#e-iniciar'); b.disabled = true;
   await abrirLista();
   b.disabled = false;
