@@ -197,14 +197,13 @@ dialog::backdrop{background:rgba(10,20,25,.55)}
   </header>
 
   <section id="v-asistencia" class="wrap">
-    <div class="card">
-      <div class="campos tres">
-        <label class="campo">Grupo<select id="a-grupo"></select></label>
-        <label class="campo">Fecha<input type="date" id="a-fecha"></label>
-        <label class="campo">Hora de inicio<input type="time" id="a-hora"></label>
-        <button class="btn primario" id="a-abrir" type="button">Abrir lista</button>
-      </div>
-    </div>
+   <div class="card">
+  <div class="campos" style="grid-template-columns: 2fr 1.2fr auto; align-items: end;">
+    <label class="campo">Grupo<select id="a-grupo"></select></label>
+    <label class="campo">Fecha<input type="date" id="a-fecha"></label>
+    <button class="btn primario" id="a-abrir" type="button">Abrir lista</button>
+  </div>
+</div>
 
     <div id="a-vacio" class="vacio">
       <strong>Elige un grupo y abre la lista</strong>
