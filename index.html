@@ -523,10 +523,16 @@ $('#e-grupo').addEventListener('change', e => cambiarGrupo(e.target.value));
 async function cargarBase(silencioso = false) {
   const d = await llamar('bootstrap');
   S.grupos = d.grupos; S.alumnos = d.alumnos; 
+  
+  // Sincroniza la hora general directamente desde el servidor central
   if (d.config.hora_entrada_general) {
     S.config.hora_entrada_general = d.config.hora_entrada_general;
     LS.set('hora_general_local', d.config.hora_entrada_general);
+  } else {
+    // Si el servidor no la tiene, toma la guardada localmente o una por defecto
+    S.config.hora_entrada_general = S.config.hora_entrada_general || '07:00';
   }
+
   S.config.tolerancia_min = d.config.tolerancia_min;
   LS.set('grupos', S.grupos); LS.set('alumnos', S.alumnos); LS.set('config', S.config);
   pintarSelectoresGrupo();
