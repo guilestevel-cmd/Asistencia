@@ -45,7 +45,6 @@ button{cursor:pointer}
 [hidden]{display:none!important}
 h1,h2,h3,p{margin:0}
 
-/* Estructura */
 main{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
 .wrap{max-width:1040px;margin:0 auto;padding:16px}
 .top{position:sticky;top:0;z-index:5;background:var(--papel);border-bottom:1px solid var(--linea);
@@ -68,7 +67,6 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
   .top{padding-left:24px;padding-right:24px}
 }
 
-/* Componentes */
 .card{background:var(--superficie);border:1px solid var(--linea);border-radius:var(--radio);padding:16px}
 .stack{display:grid;gap:16px}
 .campos{display:grid;gap:12px;grid-template-columns:1fr}
@@ -88,7 +86,6 @@ textarea{min-height:120px;resize:vertical}
 .vacio{padding:36px 16px;text-align:center;color:var(--tinta-2)}
 .vacio strong{display:block;color:var(--tinta);font-size:1.1rem;margin-bottom:4px}
 
-/* Sesión */
 .info-sesion{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:16px 0 4px}
 .info-sesion strong{font-size:1.15rem}
 .etiqueta-lista{padding:3px 10px;border-radius:999px;font-size:.85rem;font-weight:700;background:var(--ok-bg);color:var(--ok)}
@@ -106,7 +103,6 @@ textarea{min-height:120px;resize:vertical}
 .modo-btn span{display:block}
 .modo-sub{display:block;font-weight:400;font-size:.85rem;opacity:.85;margin-top:4px}
 .recientes .grado{font-size:.78rem;color:var(--tinta-2);font-weight:400}
-.aviso-cerrada{padding:14px 16px;border-radius:12px;background:var(--falta-bg);color:var(--falta);font-weight:700;margin-bottom:10px}
 @media(min-width:900px){.sin-conexion main{margin-left:0}}
 @media(min-width:700px){.alumnos{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}}
 .lectura{display:grid;gap:2px;padding:16px 18px;border-radius:16px;border:2px solid var(--linea);background:var(--papel);margin-bottom:12px;min-height:104px;align-content:center}
@@ -141,7 +137,6 @@ textarea{min-height:120px;resize:vertical}
 .nube{width:16px;height:16px;fill:none;stroke:var(--tarde);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pie{display:grid;gap:8px;margin-top:16px}
 
-/* Hoja (diálogo) */
 dialog{border:0;padding:0;background:var(--superficie);color:var(--tinta);width:min(560px,100%);max-width:100%;max-height:92dvh;border-radius:20px 20px 0 0;
   margin:auto auto 0;box-shadow:0 -8px 40px rgba(0,0,0,.25)}
 dialog::backdrop{background:rgba(10,20,25,.55)}
@@ -168,7 +163,6 @@ dialog::backdrop{background:rgba(10,20,25,.55)}
 .pestanas button{flex:1;padding:9px;border-radius:10px;border:1px solid var(--linea);background:var(--papel);font-weight:700}
 .pestanas button[aria-selected=true]{background:var(--azul-suave);border-color:var(--azul);color:var(--azul)}
 
-/* Alumnos */
 .barra{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:12px}
 .barra .campo{flex:1 1 200px}
 .barra .btn{flex:0 0 auto}
@@ -176,13 +170,11 @@ dialog::backdrop{background:rgba(10,20,25,.55)}
 .fila-alumno .id{font-size:.82rem;color:var(--tinta-2);font-variant-numeric:tabular-nums}
 .fila-alumno .btn{grid-row:1 / span 2;grid-column:2;min-height:40px;padding:6px 14px}
 
-/* Aviso y toast */
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom));z-index:20;max-width:min(92vw,520px);
   background:var(--tinta);color:var(--papel);padding:12px 16px;border-radius:12px;font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.3)}
 #toast.error{background:var(--falta);color:var(--sobre-azul)}
 @media(min-width:900px){#toast{bottom:32px}}
 
-/* Impresión de gafetes */
 #impresion{display:none}
 @media print{
   body>*:not(#impresion){display:none!important}
@@ -204,7 +196,6 @@ dialog::backdrop{background:rgba(10,20,25,.55)}
     <button class="sync" id="sync" type="button" aria-live="polite"><i></i><span>En línea</span></button>
   </header>
 
-  <!-- ===================== ASISTENCIA ===================== -->
   <section id="v-asistencia" class="wrap">
     <div class="card">
       <div class="campos tres">
@@ -232,9 +223,7 @@ dialog::backdrop{background:rgba(10,20,25,.55)}
     </div>
   </section>
 
-  <!-- ===================== ESCANEAR ===================== -->
   <section id="v-escanear" class="wrap" hidden>
-    <!-- Elegir modo: aparece cada vez que se entra a esta pestaña -->
     <div id="e-elegir" class="stack" style="max-width:560px;margin:4vh auto 0">
       <h2 style="text-align:center">¿Cómo vas a pasar asistencia?</h2>
       <button class="btn grande primario modo-btn" id="e-modo-general" type="button">
@@ -245,10 +234,10 @@ dialog::backdrop{background:rgba(10,20,25,.55)}
       </button>
     </div>
 
-    <!-- Encabezado según el modo -->
     <div id="e-cabecera-grupo" class="info-sesion" hidden>
       <strong id="e-info"></strong>
       <span class="etiqueta-lista" id="e-estado"></span>
+      <button class="btn suave" id="e-editar-hora-grupo" type="button">Cambiar hora</button>
       <button class="btn suave" id="e-cambiar-modo-1" type="button">Cambiar modo</button>
     </div>
     <div id="e-cabecera-general" class="info-sesion" hidden>
@@ -258,7 +247,6 @@ dialog::backdrop{background:rgba(10,20,25,.55)}
       <button class="btn suave" id="e-cambiar-modo-2" type="button">Cambiar modo</button>
     </div>
 
-    <!-- Selección de grupo dentro del modo Por grupo (si aún no hay lista abierta) -->
     <div id="e-sin" class="card stack" style="max-width:560px" hidden>
       <h2>¿A qué grupo le pasas lista?</h2>
       <label class="campo">Grupo<select id="e-grupo"></select></label>
@@ -266,15 +254,13 @@ dialog::backdrop{background:rgba(10,20,25,.55)}
       <p class="nota">Si la lista de hoy ya existe para este grupo, se retoma donde la dejaste.</p>
     </div>
 
-    <!-- Sin la hora general configurada todavía -->
     <div id="e-general-sin-hora" class="card stack" style="max-width:560px" hidden>
       <h2>Falta configurar la hora de entrada</h2>
-      <p class="nota">Es la hora contra la que se mide el retardo de todo el colegio en este modo. Se define una sola vez.</p>
+      <p class="nota">Es la hora contra la que se mide el retardo de todo el colegio en este modo. Se fija una sola vez en este dispositivo y se puede cambiar cuando desees.</p>
       <label class="campo">Hora de entrada<input type="time" id="e-hora-inicial"></label>
       <button class="btn primario grande" id="e-hora-guardar-inicial" type="button">Guardar y empezar a escanear</button>
     </div>
 
-    <!-- Escáner: compartido por ambos modos -->
     <div id="e-con" hidden>
       <div class="escaner">
         <div class="card">
@@ -298,8 +284,6 @@ dialog::backdrop{background:rgba(10,20,25,.55)}
     </div>
   </section>
 
-
-  <!-- ===================== ALUMNOS ===================== -->
   <section id="v-alumnos" class="wrap" hidden>
     <div class="barra">
       <label class="campo">Grupo<select id="l-grupo"></select></label>
@@ -314,7 +298,6 @@ dialog::backdrop{background:rgba(10,20,25,.55)}
     <ul class="alumnos" id="l-lista"></ul>
   </section>
 
-  <!-- ===================== CONECTAR (solo la primera vez en cada dispositivo) ===================== -->
   <section id="v-conectar" class="wrap" hidden>
     <div class="card stack" style="max-width:560px;margin:6vh auto 0">
       <h2>Conecta este dispositivo</h2>
@@ -348,9 +331,6 @@ dialog::backdrop{background:rgba(10,20,25,.55)}
 <script>
 'use strict';
 
-/* ============================================================
- * Utilidades
- * ============================================================ */
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -396,13 +376,10 @@ const mensajeError = e => {
   return MENSAJES[c.split(':')[0]] || c;
 };
 
-/* ============================================================
- * Estado
- * ============================================================ */
 const S = {
   url: LS.get('url', ''), token: LS.get('token', ''),
   grupos: LS.get('grupos', []), alumnos: LS.get('alumnos', []),
-  config: LS.get('config', { tolerancia_min: 10, hora_entrada_general: '' }),
+  config: LS.get('config', { tolerancia_min: 10, hora_entrada_general: LS.get('hora_general_local', '') }),
   grupoId: LS.get('grupoId', ''),
   sesion: null, asis: new Map(), filtro: 'todos', recientes: [], recSesion: '', probando: false, iniciando: false,
   modoEscaneo: null, recientesGeneral: [], contadorGeneral: {},
@@ -410,11 +387,8 @@ const S = {
 };
 const conectado = () => !!(S.url && S.token);
 
-/* ============================================================
- * API (Apps Script) y cola de envío
- * ============================================================ */
 class ErrorRed extends Error {}
-class ErrorAuth extends ErrorRed {}   // token rechazado: se conserva la cola, no se pierde nada
+class ErrorAuth extends ErrorRed {}
 
 async function llamar(accion, datos = {}, timeout = 25000) {
   if (!conectado()) throw new ErrorRed('Este dispositivo aún no está conectado.');
@@ -424,7 +398,7 @@ async function llamar(accion, datos = {}, timeout = 25000) {
   try {
     resp = await fetch(S.url, {
       method: 'POST', redirect: 'follow', signal: ctl.signal,
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },   // evita el "preflight" de CORS
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action: accion, token: S.token, ...datos })
     });
   } catch { throw new ErrorRed('Sin conexión con el servidor.'); }
@@ -459,8 +433,8 @@ function vaciarCola() {
         S.cola.shift();
         aplicarRespuesta(it, r);
       } catch (e) {
-        if (e instanceof ErrorRed) break;            // sin red: se conserva y se reintenta
-        S.cola.shift();                              // el servidor lo rechazó: no se reintenta
+        if (e instanceof ErrorRed) break;
+        S.cola.shift();
         toast('No se guardó: ' + mensajeError(e), true);
         if (it.accion === 'registrarGeneral') {
           const en = S.recientesGeneral.find(x => x.id_alumno === it.datos.id_alumno && x.ts === it.datos.ts);
@@ -470,7 +444,7 @@ function vaciarCola() {
       guardarCola();
     }
   })().finally(() => { vaciando = null; guardarCola(); });
-  vaciando = p;   // se asigna antes de que corra el finally
+  vaciando = p;
   return p;
 }
 
@@ -488,9 +462,6 @@ function aplicarRespuesta(it, r) {
 
 const pendientesEnvio = () => new Set(S.cola.flatMap(it => it.accion === 'registrar' ? [it.datos.id_alumno] : it.accion === 'registrarLote' ? it.datos.items.map(x => x.id_alumno) : []));
 
-/* ============================================================
- * Interfaz general
- * ============================================================ */
 let toastT;
 function toast(msg, error = false) {
   const t = $('#toast');
@@ -549,21 +520,20 @@ $('#a-grupo').addEventListener('change', e => cambiarGrupo(e.target.value));
 $('#l-grupo').addEventListener('change', e => cambiarGrupo(e.target.value));
 $('#e-grupo').addEventListener('change', e => cambiarGrupo(e.target.value));
 
-/* ============================================================
- * Carga inicial
- * ============================================================ */
 async function cargarBase(silencioso = false) {
   const d = await llamar('bootstrap');
-  S.grupos = d.grupos; S.alumnos = d.alumnos; S.config = d.config;
+  S.grupos = d.grupos; S.alumnos = d.alumnos; 
+  if (d.config.hora_entrada_general) {
+    S.config.hora_entrada_general = d.config.hora_entrada_general;
+    LS.set('hora_general_local', d.config.hora_entrada_general);
+  }
+  S.config.tolerancia_min = d.config.tolerancia_min;
   LS.set('grupos', S.grupos); LS.set('alumnos', S.alumnos); LS.set('config', S.config);
   pintarSelectoresGrupo();
   pintarAlumnos();
   if (!silencioso) toast('Datos actualizados');
 }
 
-/* ============================================================
- * ASISTENCIA
- * ============================================================ */
 function estadoVisual(r) {
   if (!r) return 'PENDIENTE';
   if (r.estado === 'AUSENTE') return r.motivo === 'ENFERMEDAD' ? 'ENFERMEDAD' : 'SIN_EXCUSA';
@@ -673,7 +643,7 @@ function pintarEscaner() {
     const hay = !!S.sesion;
     $('#e-sin').hidden = hay;
     if (!hay) return;
-    $('#e-info').textContent = `${nombreGrupo(grupoPorId(S.sesion.id_grupo))} · ${fechaLarga(S.sesion.fecha)}`;
+    $('#e-info').textContent = `${nombreGrupo(grupoPorId(S.sesion.id_grupo))} · ${fechaLarga(S.sesion.fecha)} · Inicio ${S.sesion.hora_inicio}`;
     const et = $('#e-estado');
     et.textContent = abierta() ? 'Lista abierta' : 'Lista cerrada';
     et.classList.toggle('cerrada', !abierta());
@@ -723,14 +693,16 @@ $('#e-cambiar-modo-2').addEventListener('click', () => elegirModo(null));
 
 async function guardarHoraGeneral(hora, primeraVez) {
   if (!/^\d{2}:\d{2}$/.test(hora || '')) return toast('Elige una hora válida.', true);
+  S.config.hora_entrada_general = hora;
+  LS.set('config', S.config);
+  LS.set('hora_general_local', hora);
+  if (!primeraVez) cerrarHoja();
+  pintarEscaner();
+  if (puedeEscanear()) iniciarEscaner();
+  toast('Hora de entrada guardada: ' + hora);
   try {
-    const d = await llamar('configurarHoraGeneral', { hora });
-    S.config.hora_entrada_general = d.hora_entrada_general; LS.set('config', S.config);
-    if (!primeraVez) cerrarHoja();
-    pintarEscaner();
-    if (puedeEscanear()) iniciarEscaner();
-    toast('Hora de entrada guardada: ' + d.hora_entrada_general);
-  } catch (e) { toast(mensajeError(e), true); }
+    await llamar('configurarHoraGeneral', { hora });
+  } catch {}
 }
 $('#e-hora-guardar-inicial').addEventListener('click', () => guardarHoraGeneral($('#e-hora-inicial').value, true));
 $('#e-editar-hora').addEventListener('click', () => {
@@ -743,12 +715,36 @@ $('#e-editar-hora').addEventListener('click', () => {
   $('#h-guardar', cuerpo).onclick = () => guardarHoraGeneral($('#h-hora', cuerpo).value, false);
 });
 
+$('#e-editar-hora-grupo').addEventListener('click', () => {
+  if (!S.sesion) return;
+  abrirHoja(`
+    <h2>Hora de inicio del grupo</h2>
+    <p class="nota">Modifica la hora a partir de la cual se considerará retardo para este grupo en la sesión de hoy.</p>
+    <label class="campo">Hora de inicio<input type="time" id="h-hora-grupo" value="${esc(S.sesion.hora_inicio)}"></label>
+    <div class="acciones"><button class="btn" type="button" id="h-cancelar">Cancelar</button><button class="btn primario" type="button" id="h-guardar-g">Guardar</button></div>`);
+  $('#h-cancelar', cuerpo).onclick = cerrarHoja;
+  $('#h-guardar-g', cuerpo).onclick = async () => {
+    const nuevaHora = $('#h-hora-grupo', cuerpo).value;
+    if (!/^\d{2}:\d{2}$/.test(nuevaHora)) return toast('Hora inválida', true);
+    const id_sesion = S.sesion.id_sesion;
+    S.sesion.hora_inicio = nuevaHora;
+    cerrarHoja();
+    pintarEscaner();
+    toast('Hora de inicio actualizada');
+    try {
+      const d = await llamar('actualizarHoraSesion', { id_sesion, hora: nuevaHora });
+      S.sesion = d.sesion;
+      pintarEscaner();
+    } catch (e) { toast('Guardado localmente. Se sincronizará al haber red.', true); }
+  };
+});
+
 $('#a-ir-escanear').addEventListener('click', () => { S.modoEscaneo = 'grupo'; irA('escanear'); });
 $('#e-ver-lista').addEventListener('click', () => irA('asistencia'));
 $('#e-iniciar').addEventListener('click', async () => {
   const id = $('#e-grupo').value;
   if (!id) return toast('Primero crea un grupo en la pestaña Alumnos.', true);
-  $('#a-grupo').value = id; $('#a-fecha').value = fechaLocal(); $('#a-hora').value = horaLocal();
+  $('#a-grupo').value = id; $('#a-fecha').value = fechaLocal(); $('#a-hora').value = S.config.hora_entrada_general || horaLocal();
   const b = $('#e-iniciar'); b.disabled = true;
   await abrirLista();
   b.disabled = false;
@@ -766,7 +762,6 @@ $('#a-pie').addEventListener('click', e => {
   if (e.target.closest('#a-reabrir')) reabrirLista();
 });
 
-/* ---- Registrar (escaneo o manual). Siempre pasa por la cola: ordenado y sin perder datos ---- */
 function calcularAuto(ts) {
   if (ts.slice(0, 10) !== S.sesion.fecha) return 'PRESENTE';
   return minutos(ts.slice(11, 16)) > minutos(S.sesion.hora_inicio) + Number(S.config.tolerancia_min || 0) ? 'RETARDO' : 'PRESENTE';
@@ -786,7 +781,6 @@ function registrar(alumno, datos, metodo) {
   return estado;
 }
 
-/* ---- Hoja de registro manual ---- */
 const dlg = $('#hoja'), cuerpo = $('#hoja-cuerpo');
 function abrirHoja(html) { cuerpo.innerHTML = html; if (!dlg.open) dlg.showModal(); }
 function cerrarHoja() { if (dlg.open) dlg.close(); }
@@ -846,7 +840,6 @@ function abrirRegistro(id) {
   };
 }
 
-/* ---- Cerrar y reabrir ---- */
 async function cerrarLista() {
   const pend = alumnosDe(S.sesion.id_grupo).filter(a => !S.asis.has(a.id_alumno));
   if (pend.length) {
@@ -899,9 +892,6 @@ async function reabrirLista() {
   } catch (e) { toast(mensajeError(e), true); }
 }
 
-/* ============================================================
- * ESCÁNER QR
- * ============================================================ */
 let lector = null, ultimo = { codigo: '', t: 0 }, audioCtx = null;
 
 function tono(freq, dur, delay = 0) {
@@ -941,7 +931,7 @@ async function iniciarEscaner() {
   if (!puedeEscanear() || S.escaneando || S.iniciando) return;
   if (typeof Html5Qrcode === 'undefined') return toast('El lector no se cargó. Conéctate a internet una vez y recarga la página.', true);
   S.iniciando = true;
-  tono(1, .01); // desbloquea el audio en iOS con este toque
+  tono(1, .01);
   $('#visor').hidden = false;
   try {
     lector = lector || new Html5Qrcode('lector', { formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE], verbose: false });
@@ -959,7 +949,6 @@ async function detenerEscaner() {
   S.escaneando = false; $('#visor').hidden = true; $('#e-camara-txt').textContent = 'Activar cámara';
 }
 $('#e-camara').addEventListener('click', () => S.escaneando ? detenerEscaner() : iniciarEscaner());
-// Al bloquear el teléfono o cambiar de app la cámara se apaga; al volver se reactiva sola.
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) detenerEscaner();
   else if (!$('#v-escanear').hidden && puedeEscanear()) iniciarEscaner();
@@ -967,7 +956,7 @@ document.addEventListener('visibilitychange', () => {
 
 function alLeer(texto) {
   const codigo = String(texto).trim(), ahora = Date.now();
-  if (codigo === ultimo.codigo && ahora - ultimo.t < 3000) return;   // evita lecturas dobles
+  if (codigo === ultimo.codigo && ahora - ultimo.t < 3000) return;
   ultimo = { codigo, t: ahora };
   procesarCodigo(codigo);
 }
@@ -976,7 +965,6 @@ function procesarCodigo(codigo) {
   return S.modoEscaneo === 'general' ? procesarCodigoGeneral(codigo) : procesarCodigoGrupo(codigo);
 }
 
-/* ---- Modo Por grupo: lista de un solo salón ---- */
 function procesarCodigoGrupo(codigo) {
   if (!abierta()) return;
   const id = (codigo.toUpperCase().match(/ALU-\d{6}/) || [])[0];
@@ -997,9 +985,6 @@ function procesarCodigoGrupo(codigo) {
   mostrarLectura(estado === 'RETARDO' ? 'tarde' : 'ok', nombreCompleto(a), `${ETQ[estado]} a las ${horaLocal()}`);
 }
 
-/* ---- Modo General: cualquier alumno del colegio, sin importar el grado ----
- * Cada escaneo abre (si hace falta) la lista del grupo de ese alumno para hoy y lo registra ahí mismo:
- * es la misma asistencia formal del salón, no un registro aparte. */
 function procesarCodigoGeneral(codigo) {
   if (!S.config.hora_entrada_general) return;
   const id = (codigo.toUpperCase().match(/ALU-\d{6}/) || [])[0];
@@ -1025,7 +1010,7 @@ function procesarCodigoGeneral(codigo) {
   }).catch(e => {
     if (e instanceof ErrorRed) {
       encolar('registrarGeneral', { id_alumno: a.id_alumno, metodo: 'QR', ts });
-      return; // se queda en la lectura optimista; se reconcilia al enviarse
+      return;
     }
     quitarContadorGeneral(entrada.estado);
     entrada.pendiente = false; entrada.error = true; pintarGeneral();
@@ -1048,9 +1033,6 @@ function reconciliarGeneral(entrada, r) {
   }
 }
 
-/* ============================================================
- * ALUMNOS, GRUPOS Y GAFETES
- * ============================================================ */
 function pintarAlumnos() {
   const q = $('#l-buscar').value.trim().toLowerCase();
   const filas = alumnosDe($('#l-grupo').value || S.grupoId).filter(a =>
@@ -1095,7 +1077,6 @@ function imprimir(lista) {
 $('#l-imprimir').addEventListener('click', () => imprimir(alumnosDe($('#l-grupo').value)));
 addEventListener('afterprint', () => { $('#impresion').innerHTML = ''; });
 
-/* ---- Agregar alumnos ---- */
 $('#l-agregar').addEventListener('click', () => {
   const gid = $('#l-grupo').value;
   if (!gid) return toast('Primero crea un grupo.', true);
@@ -1117,9 +1098,8 @@ $('#l-agregar').addEventListener('click', () => {
     </div>
     <div class="acciones"><button class="btn" type="button" id="n-cerrar">Listo</button><button class="btn primario" type="button" id="n-guardar">Guardar</button></div>`);
   let modo = 'uno';
-  $$('.pestanas button', cuerpo).forEach(b => b.onclick = () => {
-    modo = b.dataset.m;
-    $$('.pestanas button', cuerpo).forEach(x => x.setAttribute('aria-selected', x === b));
+  $$('.pestanas button', cuerpo).forEach(b => b.onclick = () => {     modo = b.dataset.m;     $$
+('.pestanas button', cuerpo).forEach(x => x.setAttribute('aria-selected', x === b));
     $('#m-uno', cuerpo).hidden = modo !== 'uno'; $('#m-lista', cuerpo).hidden = modo !== 'lista';
   });
   const parsear = () => $('#n-texto', cuerpo).value.split(/\r?\n/).map(l => l.trim()).filter(Boolean).map(l => {
@@ -1147,7 +1127,6 @@ $('#l-agregar').addEventListener('click', () => {
   };
 });
 
-/* ---- Nuevo grupo ---- */
 $('#l-nuevo-grupo').addEventListener('click', () => {
   abrirHoja(`
     <h2>Nuevo grupo</h2>
@@ -1164,19 +1143,16 @@ $('#l-nuevo-grupo').addEventListener('click', () => {
   };
 });
 
-/* ============================================================
- * CONECTAR (pantalla de primera vez; después desaparece)
- * ============================================================ */
 function pintarConectar(mensaje) {
   $('#c-url').value = S.url; $('#c-token').value = '';
   if (mensaje !== undefined) $('#c-estado').textContent = mensaje;
 }
-// Si el token deja de ser válido (por ejemplo lo regeneraste), se pide conectar de nuevo.
-// Los registros pendientes NO se pierden: se envían al reconectar.
+
 function pedirReconexion() {
   S.token = ''; LS.set('token', '');
   irA('conectar'); pintarConectar('El token cambió o ya no es válido. Vuelve a pegarlo para seguir. Tus registros pendientes están a salvo.');
 }
+
 $('#c-guardar').addEventListener('click', async () => {
   const url = $('#c-url').value.trim(), token = $('#c-token').value.trim();
   const estado = $('#c-estado');
@@ -1202,10 +1178,6 @@ $('#sync').addEventListener('click', () => {
   else toast(S.enLinea ? 'Todo está sincronizado' : 'Sin conexión: los registros se enviarán al volver internet', !S.enLinea);
 });
 
-/* ============================================================
- * Arranque
- * ============================================================ */
-/* Enlace de conexión: https://tu-sitio/#url=...&token=...  (el # nunca viaja al servidor; se borra al leerlo) */
 function importarConexionDesdeEnlace() {
   if (!location.hash.includes('token=')) return;
   const p = new URLSearchParams(location.hash.slice(1));
@@ -1220,7 +1192,7 @@ function importarConexionDesdeEnlace() {
 (async function iniciar() {
   importarConexionDesdeEnlace();
   $('#a-fecha').value = fechaLocal();
-  $('#a-hora').value = horaLocal();
+  $('#a-hora').value = S.config.hora_entrada_general || horaLocal();
   pintarSelectoresGrupo();
   pintarSync();
   irA(conectado() ? 'escanear' : 'conectar');
