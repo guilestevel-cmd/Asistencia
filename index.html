@@ -547,7 +547,10 @@ function estadoVisual(r) {
 const abierta = () => S.sesion && S.sesion.estado === 'ABIERTA';
 
 async function abrirLista() {
-  const id_grupo = $('#a-grupo').value, fecha = $('#a-fecha').value, hora = $('#a-hora').value;
+  const id_grupo = $('#a-grupo').value, fecha = $('#a-fecha').value;
+  // Toma por defecto la hora general del colegio o una por defecto de respaldo
+  const hora = S.config.hora_entrada_general || '07:00'; 
+  
   if (!id_grupo) return toast('Primero crea un grupo en la pestaña Alumnos.', true);
   if (!fecha) return toast('Elige una fecha.', true);
   const b = $('#a-abrir'); b.disabled = true; b.textContent = 'Abriendo…';
@@ -1197,7 +1200,6 @@ function importarConexionDesdeEnlace() {
 (async function iniciar() {
   importarConexionDesdeEnlace();
   $('#a-fecha').value = fechaLocal();
-  $('#a-hora').value = S.config.hora_entrada_general || horaLocal();
   pintarSelectoresGrupo();
   pintarSync();
   irA(conectado() ? 'escanear' : 'conectar');
