@@ -234,9 +234,9 @@ dialog::backdrop{background:rgba(10,20,25,.55)}
       <button class="btn grande modo-btn" id="e-modo-grupo" type="button">
         <span>Por grupo / salón<br><span class="modo-sub">Para pasar lista a un salón específico.</span></span>
       </button>
-      <!-- Tercer modo añadido especialmente para tu uso en Laboratorio por Curso -->
+      <!-- Modo por curso (toma la hora del sistema y no calcula retardos) -->
       <button class="btn grande modo-btn" id="e-modo-curso" type="button" style="background:var(--enf-bg); color:var(--enf); border-color:var(--enf);">
-        <span>Por curso de laboratorio<br><span class="modo-sub">Toma de forma automática la hora fija maestra de laboratorio.</span></span>
+        <span>Por curso<br><span class="modo-sub">Toma la hora del sistema al iniciar. Sin retardos (el alumno ya está dentro).</span></span>
       </button>
     </div>
 
@@ -251,7 +251,7 @@ dialog::backdrop{background:rgba(10,20,25,.55)}
       <button class="btn suave" id="e-cambiar-modo-2" type="button">Cambiar modo</button>
     </div>
     <div id="e-cabecera-curso" class="info-sesion" hidden>
-      <strong id="e-info-curso">Modo Curso / Laboratorio</strong>
+      <strong id="e-info-curso">Modo Curso</strong>
       <span id="e-hora-curso" class="etiqueta-lista"></span>
       <button class="btn suave" id="e-cambiar-modo-3" type="button">Cambiar modo</button>
     </div>
@@ -260,7 +260,7 @@ dialog::backdrop{background:rgba(10,20,25,.55)}
       <h2>¿A qué grupo o curso le pasas lista?</h2>
       <label class="campo">Grupo<select id="e-grupo"></select></label>
       <button class="btn primario grande" id="e-iniciar" type="button">Abrir la lista y escanear</button>
-      <p class="nota">Si la lista de hoy ya existe, se retoma donde la dejaste respetando la hora centralizada.</p>
+      <p class="nota">Si la lista de hoy ya existe, se retoma donde la dejaste.</p>
     </div>
 
     <div id="e-con" hidden>
@@ -286,7 +286,6 @@ dialog::backdrop{background:rgba(10,20,25,.55)}
     </div>
   </section>
 
-  <!-- Pestaña de Alumnos restaurada con todo su diseño original -->
   <section id="v-alumnos" class="wrap" hidden>
     <div class="barra">
       <label class="campo">Grupo<select id="l-grupo"></select></label>
@@ -382,7 +381,7 @@ const mensajeError = e => {
 const S = {
   url: LS.get('url', ''), token: LS.get('token', ''),
   grupos: LS.get('grupos', []), alumnos: LS.get('alumnos', []),
-  config: LS.get('config', { tolerancia_min: 10, hora_entrada_general: '07:00', hora_laboratorio: '07:00' }),
+  config: LS.get('config', { tolerancia_min: 10, hora_entrada_general: '07:00' }),
   grupoId: LS.get('grupoId', ''),
   sesion: null, asis: new Map(), filtro: 'todos', recientes: [], recSesion: '', probando: false, iniciando: false,
   modoEscaneo: null, recientesGeneral: [], contadorGeneral: {},
@@ -514,7 +513,12 @@ $('#e-grupo').addEventListener('change', e => cambiarGrupo(e.target.value));
 
 async function cargarBase(silencioso = false) {
   const d = await llamar('bootstrap');
-  S.grupos = d.grupos; S.alumnos = d.alumnos; S.config = d.config;
+  S.grupos = d.grupos; S.alumnos = d.alumnos; 
+  if (d.config.hora_entrada_general) {
+    S.config.hora_entrada_general = d.config.hora_entrada_general;
+    LS.set('hora_general_local', d.config.hora_entrada_general);
+  }
+  S.config.tolerancia_min = d.config.tolerancia_min;
   LS.set('grupos', S.grupos); LS.set('alumnos', S.alumnos); LS.set('config', S.config);
   pintarSelectoresGrupo();
   pintarAlumnos();
@@ -530,8 +534,8 @@ const abierta = () => S.sesion && S.sesion.estado === 'ABIERTA';
 
 async function abrirLista() {
   const id_grupo = $('#a-grupo').value, fecha = $('#a-fecha').value;
-  // Si estamos en modo curso, mandamos una señal especial o la hora de laboratorio maestra
-  const hora = S.modoEscaneo === 'curso' ? (S.config.hora_laboratorio || '07:00') : (S.config.hora_entrada_general || '07:00');
+  // En modo curso toma la hora exacta del sistema actual, en modo grupo/general usa la configurada
+  const hora = S.modoEscaneo === 'curso' ? horaLocal() : (S.config.hora_entrada_general || '07:00');
   if (!id_grupo) return toast('Primero crea un grupo en la pestaña Alumnos.', true);
   if (!fecha) return toast('Elige una fecha.', true);
   const b = $('#a-abrir'); b.disabled = true; b.textContent = 'Abriendo…';
@@ -588,7 +592,11 @@ function conteos() {
 function pintarLista() {
   if (!S.sesion) return;
   const c = conteos();
-  const chips = [['todos', 'Todos'], ['PRESENTE', 'Presentes'], ['RETARDO', 'Retardos'], ['AUSENTE', 'Ausentes'], ['PENDIENTE', 'Sin registrar']];
+  // En modo curso no se manejan retardos, filtramos las opciones visibles de conteo si es necesario
+  const chips = S.modoEscaneo === 'curso' 
+    ? [['todos', 'Todos'], ['PRESENTE', 'Presentes'], ['AUSENTE', 'Ausentes'], ['PENDIENTE', 'Sin registrar']]
+    : [['todos', 'Todos'], ['PRESENTE', 'Presentes'], ['RETARDO', 'Retardos'], ['AUSENTE', 'Ausentes'], ['PENDIENTE', 'Sin registrar']];
+  
   $('#a-chips').innerHTML = chips.map(([k, t]) =>
     `<button class="chip" type="button" data-f="${k}" aria-pressed="${S.filtro === k}"><b>${c[k]}</b><span>${t}</span></button>`).join('');
 
@@ -634,7 +642,7 @@ function pintarEscaner() {
     if (!hay) return;
     $('#e-info').textContent = `${nombreGrupo(grupoPorId(S.sesion.id_grupo))} · Inicio ${S.sesion.hora_inicio}`;
     if (S.modoEscaneo === 'curso') {
-      $('#e-info').textContent = `Lab Curso: ${nombreGrupo(grupoPorId(S.sesion.id_grupo))} · ${S.sesion.hora_inicio}`;
+      $('#e-info').textContent = `Curso: ${nombreGrupo(grupoPorId(S.sesion.id_grupo))} · ${S.sesion.hora_inicio}`;
     }
     const et = $('#e-estado');
     et.textContent = abierta() ? 'Lista abierta' : 'Lista cerrada';
@@ -642,7 +650,11 @@ function pintarEscaner() {
     $('#e-camara').disabled = !abierta();
     $('#e-con').hidden = false; $('#e-ver-lista').hidden = false;
     const c = conteos();
-    $('#e-conteo').innerHTML = [['Presentes', c.PRESENTE], ['Retardos', c.RETARDO], ['Faltan', c.PENDIENTE]]
+    const chipsConteo = S.modoEscaneo === 'curso'
+      ? [['Presentes', c.PRESENTE], ['Faltan', c.PENDIENTE]]
+      : [['Presentes', c.PRESENTE], ['Retardos', c.RETARDO], ['Faltan', c.PENDIENTE]];
+
+    $('#e-conteo').innerHTML = chipsConteo
       .map(([t, n]) => `<div class="chip"><b>${n}</b><span>${t}</span></div>`).join('');
     $('#e-recientes').innerHTML = S.recientes.length ? S.recientes.map(id => {
       const a = alumnoPorId(id); if (!a) return '';
@@ -696,11 +708,11 @@ $('#e-iniciar').addEventListener('click', async () => {
   if (abierta()) iniciarEscaner();
 });
 
-// Panel Exclusivo del Creador Protegido por Contraseña en el diseño original
+// Panel del Administrador (fija únicamente hora general y por grupo)
 $('#btn-admin-panel').addEventListener('click', () => {
   abrirHoja(`
-    <h2>Panel Exclusivo del Creador</h2>
-    <p class="nota">Introduce tu contraseña de creador para fijar las horas oficiales de entrada y laboratorio/cursos.</p>
+    <h2>Panel del Administrador</h2>
+    <p class="nota">Introduce tu contraseña de administrador para configurar la hora general del colegio.</p>
     <label class="campo">Contraseña<input type="password" id="adm-pass" autocomplete="current-password"></label>
     <div class="acciones"><button class="btn" type="button" id="adm-cancelar">Cancelar</button><button class="btn primario" type="button" id="adm-entrar">Acceder</button></div>
   `);
@@ -717,34 +729,28 @@ $('#btn-admin-panel').addEventListener('click', () => {
 
 function abrirPanelConfiguracionMaster() {
   abrirHoja(`
-    <h2>Configuración Maestra de Horas</h2>
+    <h2>Configuración de Horas Oficiales</h2>
     <label class="campo">Hora Entrada General (Colegio)
       <input type="time" id="m-hora-gen" value="${esc(S.config.hora_entrada_general || '07:00')}">
     </label>
-    <label class="campo">Hora Fija Laboratorio / Cursos por Turno
-      <input type="time" id="m-hora-lab" value="${esc(S.config.hora_laboratorio || '07:00')}">
-    </label>
+    <p class="nota">El modo por curso toma automáticamente la hora del sistema al abrir la sesión y registra únicamente asistencia sin retardos.</p>
     <div class="acciones"><button class="btn" type="button" id="m-cer">Cerrar</button><button class="btn primario" type="button" id="m-gua">Guardar Cambios</button></div>
   `);
   $('#m-cer', cuerpo).onclick = cerrarHoja;
   $('#m-gua', cuerpo).onclick = async () => {
     const horaGen = $('#m-hora-gen', cuerpo).value;
-    const horaLab = $('#m-hora-lab', cuerpo).value;
     try {
       await llamar('configurarHoraGeneral', { hora: horaGen });
-      await llamar('configurarHoraLab', { hora: horaLab });
       S.config.hora_entrada_general = horaGen;
-      S.config.hora_laboratorio = horaLab;
       LS.set('config', S.config);
       cerrarHoja();
-      toast('Horas maestras actualizadas en el servidor');
+      toast('Hora oficial actualizada en el servidor');
     } catch (e) {
       toast('Error al guardar: ' + e.message, true);
     }
   };
 }
 
-// Funciones de registro, escaneo y gestión de alumnos originales
 $('#a-chips').addEventListener('click', e => {
   const b = e.target.closest('[data-f]'); if (!b) return;
   S.filtro = b.dataset.f; pintarLista();
@@ -759,6 +765,9 @@ $('#a-pie').addEventListener('click', e => {
 
 function calcularAuto(ts) {
   if (ts.slice(0, 10) !== S.sesion.fecha) return 'PRESENTE';
+  // REGLA CLAVE PARA MODO CURSO: Si es modo curso, nunca hay retardo, siempre es PRESENTE directo.
+  if (S.modoEscaneo === 'curso') return 'PRESENTE';
+  
   return minutos(ts.slice(11, 16)) > minutos(S.sesion.hora_inicio) + Number(S.config.tolerancia_min || 0) ? 'RETARDO' : 'PRESENTE';
 }
 
@@ -786,9 +795,15 @@ function abrirRegistro(id) {
   const bloq = !abierta();
   let sel = r ? estadoVisual(r) : '';
   const op = (v, txt, cl) => `<label class="opcion"><input type="radio" name="est" value="${v}" ${sel === v ? 'checked' : ''} ${bloq ? 'disabled' : ''}><span class="${cl}">${txt}</span></label>`;
+  
+  // Opciones de asistencia adaptadas para modo curso (sin opción de retardo)
+  const opcionesHtml = S.modoEscaneo === 'curso'
+    ? `${op('PRESENTE', 'Presente', 'ok')}${op('SIN_EXCUSA', 'Falta', 'falta')}`
+    : `${op('PRESENTE', 'Presente', 'ok')}${op('RETARDO', 'Retardo', 'tarde')}${op('SIN_EXCUSA', 'Falta', 'falta')}`;
+
   abrirHoja(`
     <div><h2>${esc(nombreCompleto(a))}</h2><p class="nota">${esc(a.id_alumno)}</p></div>
-    <div class="opciones" role="radiogroup">${op('PRESENTE', 'Presente', 'ok')}${op('RETARDO', 'Retardo', 'tarde')}${op('SIN_EXCUSA', 'Falta', 'falta')}</div>
+    <div class="opciones" role="radiogroup">${opcionesHtml}</div>
     <div class="acciones"><button class="btn" type="button" id="reg-cancelar">Cerrar</button></div>`);
   $('#reg-cancelar', cuerpo).onclick = cerrarHoja;
 }
