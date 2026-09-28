@@ -1,6 +1,6 @@
 // Service worker de Aula: la app abre aunque no haya internet.
 // Las llamadas a Google Apps Script NUNCA se cachean (los datos siempre vienen de la hoja).
-const VERSION = 'aula-v3';
+const VERSION = 'aula-v4';
 const BASE = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
